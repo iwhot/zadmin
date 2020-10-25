@@ -1,0 +1,212 @@
+{{define "public/footer.html"}}
+    <script>
+        layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock", "upload"], function () {
+            let table = layui.table;
+            let form = layui.form;
+            let laydate = layui.laydate;
+            let okLayer = layui.okLayer;
+            let okUtils = layui.okUtils;
+            let okMock = layui.okMock;
+            let $ = layui.jquery;
+            let upload = layui.upload;
+
+            okLoading.close($);
+
+            $(".layui-dates").each(function (k, v) {
+                var type = $(v).data('type');
+                if (type == "" || type == undefined) {
+                    type = 'time';
+                }
+                laydate.render({
+                    elem: this,
+                    trigger: 'click',
+                    type: type,
+                });
+            });
+
+            $(".upload-file").each(function (k, v) {
+                var url = $(v).data("url");
+                //指定允许上传的文件类型
+                upload.render({
+                    elem: this
+                    , url: url //改成您自己的上传接口
+                    , accept: 'file' //普通文件
+                    , done: function (e) {
+                        if (e.code !== 0) {
+                            layer.msg("上传失败", {icon: 2});
+                            return false;
+                        }
+                        $(v).parent('div').prev('div').children('input').val(e.url);
+                        layer.msg("上传成功", {icon: 1});
+                    }
+                });
+            });
+
+            $(".upload-img").each(function (k, v) {
+                var url = $(v).data("url");
+                //指定允许上传的文件类型
+                upload.render({
+                    elem: this
+                    , url: url //改成您自己的上传接口
+                    , accept: 'file' //普通文件
+                    , done: function (e) {
+                        if (e.code !== 0) {
+                            layer.msg(e.msg, {icon: 2});
+                            return false;
+                        }
+                        $(this).children('input').val(e.data.url);
+                        $(this).children('img').attr("src", e.data.url);
+
+                    }
+                });
+            });
+
+            //转换静态表格
+            table.init('tableFilter', {
+                width: 0,
+                height: 0 //设置高度
+                , limit: 10 //注意：请务必确保 limit 参数（默认：10）是与你服务端限定的数据条数一致
+                , autoSort: false
+            });
+
+
+            //ajax表单提交
+            form.on("submit(save)", function (data) {
+                var field = data.field;
+                var url = data.form.action;
+                var method = data.form.method;
+
+                var index = parent.layer.getFrameIndex(window.name);
+                $.ajax({
+                    url: url,
+                    data: field,
+                    dataType: 'json',
+                    type: method,
+                    success: function (e) {
+                        if (e.code !== 0) {
+                            if (e.details != undefined) {
+                                var str = e.details.join(",");
+                                layer.msg(str, {icon: 2})
+                            } else {
+                                layer.msg(e.msg, {icon: 2});
+                            }
+
+                            return false;
+                        }
+
+                        layer.msg(e.msg, {icon: 1}, function () {
+                            parent.layer.close(index);
+                            parent.location.reload();
+                        });
+                        return false;
+                    }
+                });
+
+                return false;
+            });
+
+            form.on("switch(switch)", function (data) {
+                var url = data.elem.dataset.url;
+                var field = data.elem.dataset.field;
+                var id = data.elem.dataset.id;
+
+                var status = 0;
+                if (this.checked) {
+                    status = 1;
+                }
+
+                $.ajax({
+                    url: url,
+                    data: {field: field, id: id, status: status},
+                    dataType: 'json',
+                    type: 'post',
+                    success: function (e) {
+                        if (e.code !== 0) {
+                            layer.msg(e.msg, {icon: 2});
+                            return false;
+                        }
+
+                        layer.msg(e.msg, {icon: 1}, function () {
+                            window.location.reload();
+                        })
+                    }
+                });
+
+            });
+
+            form.on("select(types)", function (data) {
+                var val = data.value;
+                if (val == "password") {
+                    $(".secret").hide();
+                } else {
+                    $(".secret").show();
+                }
+            });
+
+        });
+
+
+        //删除一行数据
+        function delete_column(id, url) {
+            layer.confirm('确认要删除吗？', function (index) {
+                $.ajax({
+                    url: url,
+                    data: {id: id},
+                    dataType: 'json',
+                    type: 'get',
+                    success: function (e) {
+                        if (e.code !== 0) {
+                            layer.msg(e.msg, {icon: 2});
+                            return false;
+                        }
+
+                        layer.msg(e.msg, {icon: 1}, function () {
+                            window.location.reload();
+                        })
+                    }
+                })
+            });
+
+        }
+
+        //保存排序
+        function save_order(obj) {
+            var url = $(obj).data('url');
+            $.ajax({
+                url: url,
+                data: $("#tableForm").serialize(),
+                dataType: 'json',
+                type: 'post',
+                success: function (e) {
+                    if (e.code !== 0) {
+                        layer.msg(e.msg, {icon: 2});
+                        return false;
+                    }
+                    layer.msg(e.msg, {icon: 1}, function () {
+                        window.location.reload();
+                    })
+                }
+            })
+        }
+
+        //测试连通性
+        function connect(obj) {
+            var url = $(obj).data("url");
+            $.ajax({
+                url: url,
+                data: {},
+                dataType: 'json',
+                type: 'get',
+                success: function (e) {
+                    if (e.code !== 0) {
+                        layer.msg("连接失败", {icon: 2});
+                        return false;
+                    }
+                    layer.msg("连接成功", {icon: 1})
+                }
+            })
+        }
+
+
+    </script>
+{{end}}

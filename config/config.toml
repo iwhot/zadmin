@@ -1,0 +1,15 @@
+[server]
+host = "127.0.0.1"
+port = "2020"
+readTimeout = "60s"
+writeTimeout = "60s"
+
+[database]
+type = "mysql"
+host = "127.0.0.1"
+port = 3306
+uname = "root"
+passwd = "root"
+dbname = "zadmin"
+charset = "utf8mb4"
+prefix = "zs_"
