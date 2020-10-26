@@ -1,0 +1,19 @@
+server:
+  host: 127.0.0.1
+  port: 2020
+  readTimeout: 60
+  writeTimeout: 60
+  mode: debug
+
+
+database:
+  type: mysql
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: root
+  dbname: zadmin
+  charset: utf8mb4
+  prefix: zs_
+  maxOpenConns: 30
+  maxIdleConns: 10

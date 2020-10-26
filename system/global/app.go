@@ -16,7 +16,7 @@ func Init()  {
 		//配置名称
 		viper.SetConfigName("config")
 		viper.AddConfigPath("config/")
-		viper.SetConfigType("toml")
+		viper.SetConfigType("yaml")
 		//读取配置文件
 		err := viper.ReadInConfig()
 		if err != nil{

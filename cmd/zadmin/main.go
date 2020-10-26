@@ -3,14 +3,20 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/iwhot/zadmin/router"
+	"github.com/iwhot/zadmin/system/global"
+	"github.com/spf13/viper"
 	"log"
 	"net/http"
 	"time"
 )
 
+func init() {
+	global.Init()
+}
+
 func main() {
 	//设置运行模式
-	gin.SetMode("debug")
+	gin.SetMode(viper.GetString("server.mode"))
 	//获取gin
 	r := gin.New()
 	r.Use(gin.Recovery())
@@ -25,10 +31,10 @@ func main() {
 	//载入路由
 	router.NewRouter(r)
 	s := &http.Server{
-		Addr:           ":2020",
+		Addr:           viper.GetString("server.host") + ":" + viper.GetString("server.port"),
 		Handler:        r,
-		ReadTimeout:    60 * time.Second,
-		WriteTimeout:   60 * time.Second,
+		ReadTimeout:    time.Duration(viper.GetInt("server.readTimeout")) * time.Second,
+		WriteTimeout:   time.Duration(viper.GetInt("server.writeTimeout")) * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 	//打印错误
