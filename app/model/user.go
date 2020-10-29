@@ -1,6 +1,11 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import (
+	"errors"
+	page2 "github.com/iwhot/zadmin/system/page"
+	"github.com/jinzhu/gorm"
+	"time"
+)
 
 type User struct {
 	ID       uint32 `gorm:"primary_key;AUTO_INCREMENT" json:"id"`                              //id
@@ -24,17 +29,59 @@ func (u User) TableName() string {
 //用户列表
 func (u User) GetUserList(DB *gorm.DB, page, pageSize int) ([]*User, error) {
 	var userSlice []*User
-	var offset int
-	if page <= 1 {
-		offset = 0
-	} else {
-		offset = (page - 1) * pageSize
+	var offset = page2.GetOffset(page, pageSize)
+	var mod = DB.Model(&u)
+	//where条件
+	if u.Username != "" {
+		mod.Where("username like ?", "%"+u.Username+"%")
 	}
 
-	//where条件
+	if u.Email != "" {
+		mod.Where("email like ?", "%"+u.Email+"%")
+	}
 
-	if err := DB.Model(&u).Offset(offset).Limit(pageSize).Find(&userSlice).Error; err != nil {
+	if u.ID != 0 {
+		mod.Where("id = ?", u.ID)
+	}
+
+	if err := mod.Where("is_del = ?",0).Offset(offset).Limit(pageSize).Order("utime desc,id desc").Find(&userSlice).Error; err != nil {
 		return userSlice, err
 	}
+
 	return userSlice, nil
+}
+
+//添加用户
+func (u User) AddUser(DB *gorm.DB) error {
+	return DB.CreateTable(&u).Error
+}
+
+//更新用户
+func (u User) UpdateUser(DB *gorm.DB) error {
+	return DB.Model(&u).Updates(u).Error
+}
+
+//删除用户
+func (u User) DeleteUser(DB *gorm.DB) error {
+	_, err := u.GetOneUserInfo(DB)
+	if err != nil {
+		return err
+	}
+	u.IsDel = 1
+	u.Dtime = uint32(time.Now().Unix())
+	return u.UpdateUser(DB)
+}
+
+//获取一个用户信息
+func (u User) GetOneUserInfo(DB *gorm.DB) (*User, error) {
+	if u.ID == 0 {
+		return nil, errors.New("用户不存在")
+	}
+
+	users, err := u.GetUserList(DB, 0, 1)
+	if err != nil {
+		return nil, err
+	}
+
+	return users[0], nil
 }
