@@ -20,6 +20,9 @@ type User struct {
 	IsDel    uint8  `gorm:"type:tinyint(2);not null;default:0" json:"is_del"`                  //是否删除
 	Dtime    uint32 `gorm:"type:int(10);not null;default:0" json:"dtime"`                      //删除时间
 	Openid   string `gorm:"type:varchar(64);not null;default:''" json:"openid"`                //openid
+	Avatar   string `gorm:"type:varchar(255);unique_index;not null;default:''" json:"avatar"`  //头像
+	State    uint8  `gorm:"type:tinyint(2);not null;default:1" json:"state"`                   //状态
+	Desc    uint8  `gorm:"type:varchar(1000);unique_index;not null;default:''" json:"desc"`                   //描述
 }
 
 func (u User) TableName() string {
@@ -36,6 +39,10 @@ func (u User) GetUserList(DB *gorm.DB, page, pageSize int) ([]*User, error) {
 		mod.Where("username like ?", "%"+u.Username+"%")
 	}
 
+	if u.Rname != "" {
+		mod.Where("rname like ?", "%"+u.Rname+"%")
+	}
+
 	if u.Email != "" {
 		mod.Where("email like ?", "%"+u.Email+"%")
 	}
@@ -44,7 +51,7 @@ func (u User) GetUserList(DB *gorm.DB, page, pageSize int) ([]*User, error) {
 		mod.Where("id = ?", u.ID)
 	}
 
-	if err := mod.Where("is_del = ?",0).Offset(offset).Limit(pageSize).Order("utime desc,id desc").Find(&userSlice).Error; err != nil {
+	if err := mod.Where("is_del = ?", 0).Offset(offset).Limit(pageSize).Order("utime desc,id desc").Find(&userSlice).Error; err != nil {
 		return userSlice, err
 	}
 

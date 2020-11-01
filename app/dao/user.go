@@ -21,3 +21,13 @@ func (u user) GetUserList(ctx *gin.Context) ([]*model.User, error) {
 	pz := page.GetPageSize(ctx)
 	return usr.GetUserList(masterDB, p, pz)
 }
+
+//添加用户
+func (u user) AddUser(ctx *gin.Context) error {
+	var usr = model.User{
+		Username: ctx.PostForm("username"),
+		Email:    ctx.PostForm("email"),
+	}
+
+	return usr.AddUser(masterDB)
+}

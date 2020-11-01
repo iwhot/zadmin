@@ -7,14 +7,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math/rand"
-	"net"
 	"net/http"
 	"net/url"
-	"os/exec"
-	"runtime"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 )
 
@@ -161,35 +157,6 @@ func CreateCaptcha() string {
 	return fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
 }
 
-//测试端口连通性
-func TestsPortConnect(addr string) error {
-	//定义一个tcp断点
-	var tcpAddr *net.TCPAddr
-	//通过ResolveTCPAddr实例一个具体的tcp断点
-	tcpAddr, _ = net.ResolveTCPAddr("tcp", addr)
-	conn, err := net.DialTCP("tcp", nil, tcpAddr)
-
-	if err != nil {
-		return err
-	}
-
-	defer conn.Close()
-	return nil
-}
-
-func OpenUrl(addr string) {
-	urls := "http://" + addr
-	//如果是windows则自动调用默认浏览器打开网页
-	if runtime.GOOS == "windows" {
-		//1s后打开浏览器
-		time.Sleep(1 * time.Second)
-		// 无GUI调用
-		cmd := exec.Command(`cmd`, `/c`, `start`, urls)
-		cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-		_ = cmd.Start()
-	}
-}
-
 // 字节的单位转换 保留两位小数
 func FormatFileSize(fileSize int64) (size string) {
 	if fileSize < 1024 {
@@ -206,4 +173,17 @@ func FormatFileSize(fileSize int64) (size string) {
 	} else { //if fileSize < (1024 * 1024 * 1024 * 1024 * 1024 * 1024)
 		return fmt.Sprintf("%.2fEB", float64(fileSize)/float64(1024*1024*1024*1024*1024))
 	}
+}
+
+//生成盐值
+func CreateSalt(n int) string {
+	var str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*_"
+	var res []string
+	arr := strings.Split(str, "")
+	var l = len(arr)
+	for i := 0; i < n; i++ {
+		res = append(res, arr[rand.Int31n(int32(l))-1])
+	}
+
+	return strings.Join(res, "")
 }

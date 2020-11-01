@@ -15,20 +15,20 @@
     "children": [
       {
         "title": "用户列表",
-        "href": "backend/member/user-list",
+        "href": "/backend/member/user-list",
         "fontFamily": "layui-icon",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "角色列表",
-        "href": "backend/auth/role-list",
+        "href": "/backend/auth/role-list",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "权限列表",
-        "href": "backend/auth/permission-list",
+        "href": "/backend/auth/permission-list",
         "icon": "&#xe62e;",
         "spread": false
       }
@@ -42,20 +42,20 @@
     "children": [
       {
         "title": "栏目列表",
-        "href": "backend/category/category-list",
+        "href": "/backend/category/category-list",
         "fontFamily": "layui-icon",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "文章列表",
-        "href": "backend/article/article-list",
+        "href": "/backend/article/article-list",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "单页列表",
-        "href": "backend/page/list",
+        "href": "/backend/page/list",
         "icon": "&#xe62e;",
         "spread": false
       }
@@ -70,26 +70,26 @@
     "children": [
       {
         "title": "基础设置",
-        "href": "backend/setting/index",
+        "href": "/backend/setting/index",
         "fontFamily": "layui-icon",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "友情链接",
-        "href": "backend/links/links-list",
+        "href": "/backend/links/links-list",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "广告位管理",
-        "href": "backend/ad-position/position-list",
+        "href": "/backend/ad-position/position-list",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "菜单管理",
-        "href": "backend/menu/menu-list",
+        "href": "/backend/menu/menu-list",
         "icon": "&#xe62e;",
         "spread": false
       }

@@ -1,4 +1,4 @@
-{{define "public/footer.html"}}
+{{define "backend/public/footer.html"}}
     <script>
         layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock", "upload"], function () {
             let table = layui.table;
@@ -54,9 +54,9 @@
                             layer.msg(e.msg, {icon: 2});
                             return false;
                         }
-                        $(this).children('input').val(e.data.url);
-                        $(this).children('img').attr("src", e.data.url);
-
+                        $(v).parent('div').prev('div').children('input').val(e.url);
+                        $(v).parent('div').next('div').children('img').attr("src", e.data.url);
+                        layer.msg("上传成功", {icon: 1});
                     }
                 });
             });
@@ -83,14 +83,8 @@
                     dataType: 'json',
                     type: method,
                     success: function (e) {
-                        if (e.code !== 0) {
-                            if (e.details != undefined) {
-                                var str = e.details.join(",");
-                                layer.msg(str, {icon: 2})
-                            } else {
-                                layer.msg(e.msg, {icon: 2});
-                            }
-
+                        if (e.code == 0) {
+                            layer.msg(e.msg, {icon: 2});
                             return false;
                         }
 
@@ -121,7 +115,7 @@
                     dataType: 'json',
                     type: 'post',
                     success: function (e) {
-                        if (e.code !== 0) {
+                        if (e.code == 0) {
                             layer.msg(e.msg, {icon: 2});
                             return false;
                         }
@@ -155,7 +149,7 @@
                     dataType: 'json',
                     type: 'get',
                     success: function (e) {
-                        if (e.code !== 0) {
+                        if (e.code == 0) {
                             layer.msg(e.msg, {icon: 2});
                             return false;
                         }
@@ -178,7 +172,7 @@
                 dataType: 'json',
                 type: 'post',
                 success: function (e) {
-                    if (e.code !== 0) {
+                    if (e.code == 0) {
                         layer.msg(e.msg, {icon: 2});
                         return false;
                     }
@@ -198,7 +192,7 @@
                 dataType: 'json',
                 type: 'get',
                 success: function (e) {
-                    if (e.code !== 0) {
+                    if (e.code == 0) {
                         layer.msg("连接失败", {icon: 2});
                         return false;
                     }

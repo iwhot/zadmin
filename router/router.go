@@ -28,7 +28,8 @@ func NewRouter(r *gin.Engine) {
 	back := r.Group("/backend")
 	back.Use(middleware.CheckLogin(0))
 	{
-		new(backend.Index).NewRouter(back)
+		new(backend.Index).NewRouter(back)//后台首页
+		new(backend.Member).NewRouter(back)//后台用户管理
 	}
 
 	//登录
