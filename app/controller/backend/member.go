@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/iwhot/zadmin/app/controller"
+	"github.com/iwhot/zadmin/app/dao"
 	"github.com/iwhot/zadmin/app/validate"
 )
 
@@ -33,19 +34,28 @@ func (this *Member) Add(ctx *gin.Context) {
 
 //添加用户提交
 func (this *Member) AddPost(ctx *gin.Context) {
-	err := this.Validate(ctx, validate.User{})
+	//验证
+	err := this.Validate(ctx, &validate.User{})
 	if err != nil {
-		this.JSON(ctx, gin.H{
-			"code": 1,
-			"msg":  fmt.Sprintf("%v", err),
-		})
+		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
+		return
 	}
 
+	//添加用户
+	err = dao.DefaultUserDao.AddUser(ctx)
+	if err != nil {
+		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
+		return
+	}
 
+	//成功添加用户
+	this.JSON(ctx, gin.H{"code": 1, "msg": "添加用户成功"})
 }
 
 //编辑用户
 func (this *Member) Edit(ctx *gin.Context) {
+	//获取一个用户
+
 	this.Render(ctx, "backend/member/edit.html", nil)
 }
 

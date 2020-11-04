@@ -10,12 +10,19 @@
 <body>
 <div class="ok-body">
 	<!--form表单-->
-	<form class="layui-form layui-form-pane ok-form" action="/backend/member/user-add-post" method="post">
+	<form class="layui-form layui-form-pane ok-form" action="/backend/member/user-add-post" method="post" enctype="multipart/form-data">
 
 		<div class="layui-form-item">
 			<label class="layui-form-label">用户名</label>
 			<div class="layui-input-block">
 				<input type="text" name="username" value="" placeholder="请输入用户名" autocomplete="off" class="layui-input" lay-verify="required">
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱</label>
+			<div class="layui-input-block">
+				<input type="email" name="email" value="" placeholder="请输入邮箱" autocomplete="off" class="layui-input" lay-verify="required">
 			</div>
 		</div>
 
@@ -29,14 +36,14 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">密码</label>
 			<div class="layui-input-block">
-				<input type="text" name="password" value="" placeholder="请输入密码" autocomplete="off" class="layui-input" lay-verify="required">
+				<input type="password" name="password" value="" placeholder="请输入密码" autocomplete="off" class="layui-input" lay-verify="required">
 			</div>
 		</div>
 
 		<div class="layui-form-item">
 			<label class="layui-form-label">重复密码</label>
 			<div class="layui-input-block">
-				<input type="text" name="repassword" value="" placeholder="请再次输入密码" autocomplete="off" class="layui-input" lay-verify="required">
+				<input type="password" name="repassword" value="" placeholder="请再次输入密码" autocomplete="off" class="layui-input" lay-verify="required">
 			</div>
 		</div>
 
@@ -56,10 +63,10 @@
 				<input type="text" name="avatar" value="" class="layui-input">
 			</div>
 			<div class="layui-input-inline">
-				<button type="button" class="layui-btn upload-img" data-url="/backend/index/upload"><i class="layui-icon"></i>上传文件</button>
+				<button type="button" class="layui-btn upload-img" data-url="/backend/upload"><i class="layui-icon"></i>上传文件</button>
 			</div>
 			<div class="layui-input-inline">
-				<img src="" alt="" width="60" height="60" style="border: 1px solid #eee;padding: 0;margin-left:-75px;">
+				<img src="/uploads/nophoto.jpg" alt="图片没有上传哦！" title="图片没有上传哦！" width="60" height="60" style="border: 1px solid #eee;padding: 0;margin-left:-75px;">
 			</div>
 		</div>
 

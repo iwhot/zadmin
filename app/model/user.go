@@ -8,25 +8,25 @@ import (
 )
 
 type User struct {
-	ID       uint32 `gorm:"primary_key;AUTO_INCREMENT" json:"id"`                              //id
-	Username string `gorm:"type:varchar(30);unique_index;not null;default:''" json:"username"` //用户名
-	Password string `gorm:"type:varchar(64);not null;default:''" json:"password"`              //密码
-	Salt     string `gorm:"type:varchar(10);not null;default:'zadmin'" json:"salt"`            //盐值
-	Email    string `gorm:"type:varchar(255);unique_index;not null;default:''" json:"email"`   //邮箱
-	Rname    string `gorm:"type:varchar(64);not null;default:''" json:"rname"`                 //昵称
-	Ctime    uint32 `gorm:"type:int(10);not null;default:0" json:"ctime"`                      //创建时间
-	Utime    uint32 `gorm:"type:int(10);not null;default:0" json:"utime"`                      //更新时间
-	Ltime    uint32 `gorm:"type:int(10);not null;default:0" json:"ltime"`                      //登录时间
-	IsDel    uint8  `gorm:"type:tinyint(2);not null;default:0" json:"is_del"`                  //是否删除
-	Dtime    uint32 `gorm:"type:int(10);not null;default:0" json:"dtime"`                      //删除时间
-	Openid   string `gorm:"type:varchar(64);not null;default:''" json:"openid"`                //openid
-	Avatar   string `gorm:"type:varchar(255);unique_index;not null;default:''" json:"avatar"`  //头像
-	State    uint8  `gorm:"type:tinyint(2);not null;default:1" json:"state"`                   //状态
-	Desc    uint8  `gorm:"type:varchar(1000);unique_index;not null;default:''" json:"desc"`                   //描述
+	ID       uint32 `gorm:"column:id;primary_key;AUTO_INCREMENT" json:"id"`                                    //id
+	Username string `gorm:"column:username;type:varchar(30);unique_index;not null;default:''" json:"username"` //用户名
+	Password string `gorm:"column:password;type:varchar(64);not null;default:''" json:"password"`              //密码
+	Salt     string `gorm:"column:salt;type:varchar(10);not null;default:'zadmin'" json:"salt"`                //盐值
+	Email    string `gorm:"column:email;type:varchar(255);unique_index;not null;default:''" json:"email"`      //邮箱
+	Rname    string `gorm:"column:rname;type:varchar(64);not null;default:''" json:"rname"`                    //昵称
+	Ctime    uint32 `gorm:"column:ctime;type:int(10);not null;default:0" json:"ctime"`                         //创建时间
+	Utime    uint32 `gorm:"column:utime;type:int(10);not null;default:0" json:"utime"`                         //更新时间
+	Ltime    uint32 `gorm:"column:ltime;type:int(10);not null;default:0" json:"ltime"`                         //登录时间
+	IsDel    uint8  `gorm:"column:is_del;type:tinyint(2);not null;default:0" json:"is_del"`                    //是否删除
+	Dtime    uint32 `gorm:"column:dtime;type:int(10);not null;default:0" json:"dtime"`                         //删除时间
+	Openid   string `gorm:"column:openid;type:varchar(64);not null;default:''" json:"openid"`                  //openid
+	Avatar   string `gorm:"column:avatar;type:varchar(255);unique_index;not null;default:''" json:"avatar"`    //头像
+	State    uint8  `gorm:"column:state;type:tinyint(2);not null;default:1" json:"state"`                      //状态
+	Desc     string `gorm:"column:desc;type:varchar(1000);unique_index;not null;default:''" json:"desc"`       //描述
 }
 
 func (u User) TableName() string {
-	return pre + "user"
+	return Prefix + "user"
 }
 
 //用户列表
@@ -60,7 +60,7 @@ func (u User) GetUserList(DB *gorm.DB, page, pageSize int) ([]*User, error) {
 
 //添加用户
 func (u User) AddUser(DB *gorm.DB) error {
-	return DB.CreateTable(&u).Error
+	return DB.Create(&u).Error
 }
 
 //更新用户

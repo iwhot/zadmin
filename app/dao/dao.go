@@ -22,7 +22,7 @@ func init() {
 		viper.GetString("database.dbname"),
 		viper.GetString("database.charset"))
 
-	masterDB, err = gorm.Open(viper.GetString("database.prefix"), dsn)
+	masterDB, err = gorm.Open(viper.GetString("database.type"), dsn)
 	if err != nil {
 		panic(fmt.Sprintf("gorm.Open err :%v,", err))
 	}

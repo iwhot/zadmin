@@ -32,7 +32,7 @@
                     , url: url //改成您自己的上传接口
                     , accept: 'file' //普通文件
                     , done: function (e) {
-                        if (e.code !== 0) {
+                        if (e.code == 0) {
                             layer.msg("上传失败", {icon: 2});
                             return false;
                         }
@@ -50,12 +50,12 @@
                     , url: url //改成您自己的上传接口
                     , accept: 'file' //普通文件
                     , done: function (e) {
-                        if (e.code !== 0) {
+                        if (e.code == 0) {
                             layer.msg(e.msg, {icon: 2});
                             return false;
                         }
                         $(v).parent('div').prev('div').children('input').val(e.url);
-                        $(v).parent('div').next('div').children('img').attr("src", e.data.url);
+                        $(v).parent('div').next('div').children('img').attr("src", e.url);
                         layer.msg("上传成功", {icon: 1});
                     }
                 });
@@ -183,23 +183,6 @@
             })
         }
 
-        //测试连通性
-        function connect(obj) {
-            var url = $(obj).data("url");
-            $.ajax({
-                url: url,
-                data: {},
-                dataType: 'json',
-                type: 'get',
-                success: function (e) {
-                    if (e.code == 0) {
-                        layer.msg("连接失败", {icon: 2});
-                        return false;
-                    }
-                    layer.msg("连接成功", {icon: 1})
-                }
-            })
-        }
 
 
     </script>

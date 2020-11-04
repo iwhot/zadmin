@@ -55,6 +55,7 @@ func (this *Controller) Validate(ctx *gin.Context, valid interface{}) error {
 //自定义验证方法
 func checkValidator(ctx *gin.Context, valid interface{}, trans ut.Translator) error {
 	err := ctx.ShouldBind(valid)
+
 	if err != nil {
 		//解析err
 		errs, ok := err.(validator.ValidationErrors)

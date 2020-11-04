@@ -2,9 +2,15 @@ package backend
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/iwhot/zadmin/app/controller"
+	"github.com/iwhot/zadmin/app/dao"
+	"github.com/iwhot/zadmin/app/model"
+	"github.com/iwhot/zadmin/system/common"
 	"os"
+	"path/filepath"
+	"time"
 )
 
 type Index struct {
@@ -15,6 +21,7 @@ func (this *Index) NewRouter(g *gin.RouterGroup) {
 	g.GET("/index", this.Index)
 	g.GET("/menu", this.Menu)
 	g.GET("/welcome", this.Welcome)
+	g.POST("/upload", this.Upload)
 }
 
 //后台首页
@@ -35,4 +42,49 @@ func (this *Index) Menu(ctx *gin.Context) {
 //欢迎页面
 func (this *Index) Welcome(ctx *gin.Context) {
 	this.Render(ctx, "backend/index/welcome.html", nil)
+}
+
+//文件上传
+func (this *Index) Upload(ctx *gin.Context) {
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
+		return
+	}
+
+	var upd = "storage"
+
+	paths := "/uploads/" + time.Now().Format("20060102") + "/"
+	err = common.CreateFile(upd + paths)
+	if err != nil {
+		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
+		return
+	}
+
+	name := file.Filename
+	size := file.Size
+	//获取后缀
+	ext := filepath.Ext(name)
+	filename := paths + time.Now().Format("20060102") + common.CreateCaptcha() + ext
+	err = ctx.SaveUploadedFile(file, upd+filename)
+	if err != nil {
+		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
+		return
+	}
+
+	var f = model.Files{
+		Name:  name,
+		Url:   filename,
+		Size:  float64(size),
+		Type:  0,
+		Ctime: uint32(time.Now().Unix()),
+	}
+
+	err = dao.DefaultFilesDao.Create(f)
+	if err != nil {
+		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
+		return
+	}
+
+	this.JSON(ctx, gin.H{"code": 1, "msg": "上传成功", "url": filename})
 }

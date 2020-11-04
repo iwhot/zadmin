@@ -1,9 +1,14 @@
 package model
 
-import "github.com/spf13/viper"
+import (
+	"github.com/iwhot/zadmin/system/global"
+	"github.com/spf13/viper"
+)
 
-var pre = viper.GetString("database.prefix")
+var Prefix string
 
 func init()  {
-	//todo
+	global.Init()
+	Prefix = viper.GetString("database.prefix")
 }
+
