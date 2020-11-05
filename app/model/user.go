@@ -33,22 +33,24 @@ func (u User) TableName() string {
 func (u User) GetUserList(DB *gorm.DB, page, pageSize int) ([]*User, error) {
 	var userSlice []*User
 	var offset = page2.GetOffset(page, pageSize)
-	var mod = DB.Model(&u)
+	var mod *gorm.DB
+
+	mod = DB.Model(&u)
 	//where条件
 	if u.Username != "" {
-		mod.Where("username like ?", "%"+u.Username+"%")
+		mod = mod.Where("username like ?", "%"+u.Username+"%")
 	}
 
 	if u.Rname != "" {
-		mod.Where("rname like ?", "%"+u.Rname+"%")
+		mod = mod.Where("rname like ?", "%"+u.Rname+"%")
 	}
 
 	if u.Email != "" {
-		mod.Where("email like ?", "%"+u.Email+"%")
+		mod = mod.Where("email like ?", "%"+u.Email+"%")
 	}
 
 	if u.ID != 0 {
-		mod.Where("id = ?", u.ID)
+		mod = mod.Where("id = ?", u.ID)
 	}
 
 	if err := mod.Where("is_del = ?", 0).Offset(offset).Limit(pageSize).Order("utime desc,id desc").Find(&userSlice).Error; err != nil {
@@ -91,4 +93,32 @@ func (u User) GetOneUserInfo(DB *gorm.DB) (*User, error) {
 	}
 
 	return users[0], nil
+}
+
+//获取记录数量
+func (u User) Count(DB *gorm.DB) int {
+	var count int
+	var mod = DB.Model(&u)
+	//where条件
+	if u.Username != "" {
+		mod.Where("username like ?", "%"+u.Username+"%")
+	}
+
+	if u.Rname != "" {
+		mod.Where("rname like ?", "%"+u.Rname+"%")
+	}
+
+	if u.Email != "" {
+		mod.Where("email like ?", "%"+u.Email+"%")
+	}
+
+	if u.ID != 0 {
+		mod.Where("id = ?", u.ID)
+	}
+
+	if err := mod.Count(&count).Error; err != nil {
+		return 0
+	}
+
+	return count
 }

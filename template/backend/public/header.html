@@ -1,17 +1,36 @@
 {{define "backend/public/header.html"}}
-<link rel="stylesheet" href="/static/backend/css/oksub.css">
-<script type="text/javascript" src="/static/backend/lib/loading/okLoading.js"></script>
-<script src="/static/backend/lib/layui/layui.js"></script>
-<style>
-    .ok-nav {
-        position: relative;
-        z-index: 99;
-        line-height: 39px;
-        height: 39px;
-        padding: 0px 20px;
-        overflow: hidden;
-        background: rgb(255, 255, 255);
-        box-shadow: 1px 1px 10px #ccc;
-    }
-</style>
+    <link rel="stylesheet" href="/static/backend/css/oksub.css">
+    <script type="text/javascript" src="/static/backend/lib/loading/okLoading.js"></script>
+    <script src="/static/backend/lib/layui/layui.js"></script>
+    <script src="/static/backend/js/admin.js"></script>
+    <style>
+        .ok-nav {
+            position: relative;
+            z-index: 99;
+            line-height: 39px;
+            height: 39px;
+            padding: 0px 20px;
+            overflow: hidden;
+            background: rgb(255, 255, 255);
+            box-shadow: 1px 1px 10px #ccc;
+        }
+
+        .layui-laypage {
+            display: block;
+        }
+
+        .pagination {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+        .pagination li.active span {
+            background: #009688;
+            color: #ffffff;
+        }
+    </style>
 {{end}}

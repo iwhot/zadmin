@@ -187,3 +187,8 @@ func CreateSalt(n int) string {
 
 	return strings.Join(res, "")
 }
+
+//时间戳转时间
+func UnixToDateTime(u uint32) string {
+	return time.Unix(int64(u),0).Format("2006-01-02 15:04:05")
+}

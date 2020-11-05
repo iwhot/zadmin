@@ -13,6 +13,8 @@ import (
 	"strings"
 )
 
+const PAGESIZE = 20 //一页条数
+
 type Controller struct {
 }
 

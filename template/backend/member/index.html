@@ -22,30 +22,30 @@
 	<!--数据表格-->
 	<div class="layui-row">
 
-		<form class="layui-form ok-search-form">
+		<form class="layui-form ok-search-form" action="/backend/member/user-list" method="get">
 			<div class="layui-form-item">
 				<div class="layui-inline">
 					<label class="layui-form-label">账号</label>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" placeholder="账号" autocomplete="off" name="username">
+						<input type="text" class="layui-input" placeholder="账号" autocomplete="off" name="username" value="{{.username}}">
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">昵称</label>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" placeholder="昵称" autocomplete="off" name="nickname">
+						<input type="text" class="layui-input" placeholder="昵称" autocomplete="off" name="rname" value="{{.rname}}">
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">邮箱</label>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" placeholder="邮箱" autocomplete="off" name="email">
+						<input type="text" class="layui-input" placeholder="邮箱" autocomplete="off" name="email" value="{{.email}}">
 					</div>
 				</div>
 
 				<div class="layui-inline">
 					<div class="layui-input-inline">
-						<button class="layui-btn" lay-submit="" lay-filter="search">
+						<button class="layui-btn" type="submit">
 							<i class="layui-icon">&#xe615;</i>
 						</button>
 					</div>
@@ -72,28 +72,32 @@
 					</tr>
 				</thead>
 				<tbody>
-
+					{{range $k,$v := .list}}
 					<tr>
-						<td>啦啦</td>
-						<td>啦啦</td>
-						<td>啦啦</td>
-						<td>啦啦</td>
-						<td>啦啦</td>
+						<td>{{$v.ID}}</td>
+						<td>{{$v.Username}}</td>
+						<td>{{$v.Rname}}</td>
+						<td>{{$v.Email}}</td>
+						<td>{{UnixToDateTime $v.Ctime}}</td>
+						<td>{{UnixToDateTime $v.Ltime}}</td>
 						<td>
-							<a title="编辑"  onclick="layui.okLayer.open('编辑SSH', '', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
+							<a title="编辑"  onclick="layui.okLayer.open('编辑SSH', '/backend/member/user-edit/{{$v.ID}}', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
 								编辑
 							</a>&nbsp;&nbsp;
-							<a title="删除" onclick="delete_column(1,'/ssh/delete')" href="javascript:;" style="color: #2D8CF0">
+
+							{{if ne $v.ID 1}}
+							<a title="删除" onclick="delete_column({{$v.ID}},'/backend/member/user-delete')" href="javascript:;" style="color: #2D8CF0">
 								删除
 							</a>
+							{{end}}
 						</td>
 					</tr>
-
+					{{end}}
 				</tbody>
 			</table>
 		</form>
 		<div class="layui-laypage">
-
+			{{.page}}
 		</div>
 
 

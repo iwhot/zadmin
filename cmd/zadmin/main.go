@@ -3,8 +3,10 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/iwhot/zadmin/router"
+	"github.com/iwhot/zadmin/system/common"
 	"github.com/iwhot/zadmin/system/global"
 	"github.com/spf13/viper"
+	"html/template"
 	"log"
 	"net/http"
 	"time"
@@ -24,10 +26,17 @@ func main() {
 	//设置静态文件位置
 	r.Static("/static", "storage/static")
 	r.Static("/uploads", "storage/uploads")
+
+	//设置模板函数要在载入模板前面
+	r.SetFuncMap(template.FuncMap{
+		"UnixToDateTime":common.UnixToDateTime,
+	})
+
 	//載入模板
 	r.LoadHTMLGlob("template/**/**/*")
 	//表单限制上传大小
 	r.MaxMultipartMemory = 8 << 20
+
 	//载入路由
 	router.NewRouter(r)
 	s := &http.Server{
