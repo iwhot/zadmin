@@ -10,12 +10,12 @@ type Role struct {
 }
 
 func (this *Role) NewRouter(g *gin.RouterGroup) {
-	g.GET("/backend/auth/role-list", this.Index)
-	g.GET("/backend/auth/role-add", this.Add)
-	g.POST("/backend/auth/role-add-post", this.AddPost)
-	g.GET("/backend/auth/role-edit", this.Edit)
-	g.POST("/backend/auth/role-edit-post", this.EditPost)
-	g.GET("/backend/auth/role-delete", this.Delete)
+	g.GET("/backend/auth-role/role-list", this.Index)
+	g.GET("/backend/auth-role/role-add", this.Add)
+	g.POST("/backend/auth-role/role-add-post", this.AddPost)
+	g.GET("/backend/auth-role/role-edit", this.Edit)
+	g.POST("/backend/auth-role/role-edit-post", this.EditPost)
+	g.GET("/backend/auth-role/role-delete", this.Delete)
 }
 
 //角色列表
