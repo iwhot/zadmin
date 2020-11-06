@@ -68,7 +68,7 @@ func (r role) Update(ctx *gin.Context) error {
 	var rol = model.Role{
 		ID:        uint32(id),
 		RoleName:  ctx.PostForm("role_name"),
-		RoleUtime: t,
+		RoleUtime: uint32(t),
 		RoleDesc:  ctx.PostForm("role_desc"),
 	}
 
