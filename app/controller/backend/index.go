@@ -52,10 +52,8 @@ func (this *Index) Upload(ctx *gin.Context) {
 		return
 	}
 
-	var upd = "storage"
-
 	paths := "/uploads/" + time.Now().Format("20060102") + "/"
-	err = common.CreateFile(upd + paths)
+	err = common.CreateFile(controller.STORAGEPATH + paths)
 	if err != nil {
 		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
 		return
@@ -66,7 +64,7 @@ func (this *Index) Upload(ctx *gin.Context) {
 	//获取后缀
 	ext := filepath.Ext(name)
 	filename := paths + time.Now().Format("20060102") + common.CreateCaptcha() + ext
-	err = ctx.SaveUploadedFile(file, upd+filename)
+	err = ctx.SaveUploadedFile(file, controller.STORAGEPATH+filename)
 	if err != nil {
 		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
 		return

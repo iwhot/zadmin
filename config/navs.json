@@ -22,13 +22,13 @@
       },
       {
         "title": "角色列表",
-        "href": "/backend/auth/role-list",
+        "href": "/backend/auth-role/role-list",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "权限列表",
-        "href": "/backend/auth/permission-list",
+        "href": "/backend/auth-permission/permission-list",
         "icon": "&#xe62e;",
         "spread": false
       }

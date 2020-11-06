@@ -63,11 +63,11 @@
 				<thead>
 					<tr>
 						<th lay-data="{field:'id'}">ID</th>
-						<th lay-data="{field:'name'}">用户名</th>
-						<th lay-data="{field:'host'}">昵称</th>
-						<th lay-data="{field:'types'}">邮箱</th>
-						<th lay-data="{field:'uname'}">创建时间</th>
-						<th lay-data="{field:'uname'}">登陆时间</th>
+						<th lay-data="{field:'username'}">用户名</th>
+						<th lay-data="{field:'rname'}">昵称</th>
+						<th lay-data="{field:'email'}">邮箱</th>
+						<th lay-data="{field:'ctime'}">创建时间</th>
+						<th lay-data="{field:'ltime'}">登陆时间</th>
 						<th lay-data="{field:'manage'}">操作</th>
 					</tr>
 				</thead>
@@ -81,7 +81,7 @@
 						<td>{{UnixToDateTime $v.Ctime}}</td>
 						<td>{{UnixToDateTime $v.Ltime}}</td>
 						<td>
-							<a title="编辑"  onclick="layui.okLayer.open('编辑SSH', '/backend/member/user-edit/{{$v.ID}}', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
+							<a title="编辑"  onclick="layui.okLayer.open('编辑用户', '/backend/member/user-edit/{{$v.ID}}', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
 								编辑
 							</a>&nbsp;&nbsp;
 

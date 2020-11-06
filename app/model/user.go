@@ -2,8 +2,11 @@ package model
 
 import (
 	"errors"
+	"github.com/iwhot/zadmin/system/common"
 	page2 "github.com/iwhot/zadmin/system/page"
 	"github.com/jinzhu/gorm"
+	"log"
+	"os"
 	"time"
 )
 
@@ -61,24 +64,119 @@ func (u User) GetUserList(DB *gorm.DB, page, pageSize int) ([]*User, error) {
 }
 
 //添加用户
-func (u User) AddUser(DB *gorm.DB) error {
-	return DB.Create(&u).Error
+func (u User) AddUser(DB *gorm.DB, spath string) error {
+	tx := DB.Begin()
+	//用户入库
+	if err := tx.Create(&u).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if u.Avatar != "" {
+		var fls = Files{
+			Url: u.Avatar,
+		}
+
+		//查询文件管理器中对应文件
+		fls1, err := fls.FindOne(tx)
+
+		log.Println(err)
+		if err != nil {
+			if common.IsExists(spath + u.Avatar) {
+				//如果不在管理器中就干掉文件
+				_ = os.Remove(spath + u.Avatar)
+			}
+			tx.Commit()
+			return nil
+		}
+
+		//文件管理器中文件生效
+		var fls2 = Files{
+			ID:   fls1.ID,
+			Type: 1,
+		}
+
+		if err := fls2.Update(tx); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	tx.Commit()
+	return nil
 }
 
 //更新用户
-func (u User) UpdateUser(DB *gorm.DB) error {
-	return DB.Model(&u).Updates(u).Error
+func (u User) UpdateUser(DB *gorm.DB, spath string) error {
+	tx := DB.Begin()
+
+	//通过id获取之前的记录
+	usr, err := u.GetOneUserInfo(tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if usr.Avatar != "" {
+		var fls1 = Files{
+			Url: usr.Avatar,
+		}
+
+		fls2, err := fls1.FindOne(tx)
+		if err == nil { //没毛病就删掉
+			_ = fls2.Delete(tx, spath)
+		}
+
+		if common.IsExists(spath + usr.Avatar) {
+			_ = os.Remove(spath + usr.Avatar)
+		}
+	}
+
+	//更新用户
+	if err := tx.Model(&u).Updates(u).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if u.Avatar != "" {
+		var fls3 = Files{
+			Url: u.Avatar,
+		}
+
+		fls4, err := fls3.FindOne(tx)
+		if err != nil {
+			if common.IsExists(spath + u.Avatar) {
+				//如果不在管理器中就干掉文件
+				_ = os.Remove(spath + u.Avatar)
+			}
+			tx.Commit()
+			return nil
+		}
+
+		var fls5 = Files{
+			ID:   fls4.ID,
+			Type: 1,
+		}
+
+		if err := fls5.Update(tx); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	tx.Commit()
+	return nil
 }
 
 //删除用户
-func (u User) DeleteUser(DB *gorm.DB) error {
+func (u User) DeleteUser(DB *gorm.DB, spath string) error {
 	_, err := u.GetOneUserInfo(DB)
 	if err != nil {
 		return err
 	}
 	u.IsDel = 1
 	u.Dtime = uint32(time.Now().Unix())
-	return u.UpdateUser(DB)
+	return u.UpdateUser(DB, spath)
 }
 
 //获取一个用户信息

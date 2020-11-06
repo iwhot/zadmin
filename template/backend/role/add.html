@@ -1,0 +1,41 @@
+{{define "backend/role/add.html"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>添加角色</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	{{template "backend/public/header.html"}}
+</head>
+<body>
+<div class="ok-body">
+	<!--form表单-->
+	<form class="layui-form layui-form-pane ok-form" action="/backend/auth-role/role-add-post" method="post" enctype="multipart/form-data">
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">角色名</label>
+			<div class="layui-input-block">
+				<input type="text" name="role_name" value="" placeholder="请输入角色名" autocomplete="off" class="layui-input" lay-verify="required">
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<textarea name="role_desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit lay-filter="save">立即提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+</div>
+<!--js逻辑-->
+{{template "backend/public/footer.html"}}
+</body>
+</html>
+{{end}}

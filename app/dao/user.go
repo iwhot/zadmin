@@ -27,7 +27,7 @@ func (u user) GetUserList(ctx *gin.Context, pz int) ([]*model.User, error) {
 }
 
 //添加用户
-func (u user) AddUser(ctx *gin.Context) error {
+func (u user) AddUser(ctx *gin.Context, spath string) error {
 	//手工验证密码
 	var passwd = ctx.PostForm("password")
 	var repasswd = ctx.PostForm("repassword")
@@ -61,7 +61,7 @@ func (u user) AddUser(ctx *gin.Context) error {
 		Salt:     salt,
 	}
 
-	return usr.AddUser(masterDB)
+	return usr.AddUser(masterDB, spath)
 }
 
 //获取一条用户记录
@@ -85,7 +85,7 @@ func (u user) Count(ctx *gin.Context) int {
 }
 
 //编辑用户
-func (u user) Update(ctx *gin.Context) error {
+func (u user) Update(ctx *gin.Context, spath string) error {
 	//手工验证密码
 	var passwd = ctx.PostForm("password")
 	var repasswd = ctx.PostForm("repassword")
@@ -119,25 +119,25 @@ func (u user) Update(ctx *gin.Context) error {
 			Password: pwd,
 		}
 
-		return usr.UpdateUser(masterDB)
+		return usr.UpdateUser(masterDB, spath)
 
 	} else {
 		var usr = model.User{
-			ID:       uint32(id),
-			Rname:    ctx.PostForm("rname"),
-			Avatar:   ctx.PostForm("avatar"),
-			Desc:     ctx.PostForm("desc"),
-			Email:    ctx.PostForm("email"),
-			Utime:    uint32(t),
+			ID:     uint32(id),
+			Rname:  ctx.PostForm("rname"),
+			Avatar: ctx.PostForm("avatar"),
+			Desc:   ctx.PostForm("desc"),
+			Email:  ctx.PostForm("email"),
+			Utime:  uint32(t),
 		}
 
-		return usr.UpdateUser(masterDB)
+		return usr.UpdateUser(masterDB, spath)
 	}
 
 }
 
 //删除用户
-func (u user) Delete(ctx *gin.Context) error {
+func (u user) Delete(ctx *gin.Context, spath string) error {
 	var id, _ = strconv.Atoi(ctx.Query("id"))
 	if id == 0 {
 		return errors.New("用户不存在")
@@ -147,5 +147,5 @@ func (u user) Delete(ctx *gin.Context) error {
 		ID: uint32(id),
 	}
 
-	return usr.DeleteUser(masterDB)
+	return usr.DeleteUser(masterDB, spath)
 }

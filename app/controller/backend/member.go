@@ -30,21 +30,22 @@ func (this *Member) Index(ctx *gin.Context) {
 	var param string
 	param = "zs=1";
 	if username != "" {
-		param = "&username=" + ctx.Query("username")
+		param = "&username=" + username
 	}
 
 	if email != "" {
-		param = "&email=" + ctx.Query("email")
+		param = "&email=" + email
 	}
 
 	if rname != "" {
-		param = "&rname=" + ctx.Query("rname")
+		param = "&rname=" + rname
 	}
 
+	p := page.GetNowPage(ctx)
 	user, _ := dao.DefaultUserDao.GetUserList(ctx, controller.PAGESIZE)
 	count := dao.DefaultUserDao.Count(ctx)
 
-	pageHtml := page.NewPage().Pagination(0, controller.PAGESIZE, count, param)
+	pageHtml := page.NewPage().Pagination(p, controller.PAGESIZE, count, param)
 	this.Render(ctx, "backend/member/index.html", gin.H{
 		"list":     user,
 		"page":     pageHtml,
@@ -70,7 +71,7 @@ func (this *Member) AddPost(ctx *gin.Context) {
 	}
 
 	//添加用户
-	err = dao.DefaultUserDao.AddUser(ctx)
+	err = dao.DefaultUserDao.AddUser(ctx, controller.STORAGEPATH)
 	if err != nil {
 		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
 		return
@@ -99,7 +100,7 @@ func (this *Member) EditPost(ctx *gin.Context) {
 	}
 
 	//编辑用户
-	err = dao.DefaultUserDao.Update(ctx)
+	err = dao.DefaultUserDao.Update(ctx, controller.STORAGEPATH)
 	if err != nil {
 		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
 		return
@@ -111,7 +112,7 @@ func (this *Member) EditPost(ctx *gin.Context) {
 
 //删除用户
 func (this *Member) Delete(ctx *gin.Context) {
-	err := dao.DefaultUserDao.Delete(ctx)
+	err := dao.DefaultUserDao.Delete(ctx, controller.STORAGEPATH)
 	if err != nil {
 		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
 		return
