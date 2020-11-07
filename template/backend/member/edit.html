@@ -18,6 +18,17 @@
 				<input type="text" value="{{.UserInfo.Username}}" disabled class="layui-input layui-disabled">
 			</div>
 		</div>
+		{{$roleID := .UserInfo.RoleID}}
+		<div class="layui-form-item">
+			<label class="layui-form-label">角色</label>
+			<div class="layui-input-block">
+				<select name="role_id" lay-verify="required">
+					{{range $k,$v := .Roles}}
+						<option value="{{$v.ID}}" {{if eq $v.ID $roleID}} selected="selected"{{end}}>{{$v.RoleName}}</option>
+					{{end}}
+				</select>
+			</div>
+		</div>
 
 		<div class="layui-form-item">
 			<label class="layui-form-label">邮箱</label>

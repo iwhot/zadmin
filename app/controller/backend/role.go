@@ -17,7 +17,7 @@ func (this *Role) NewRouter(g *gin.RouterGroup) {
 	g.GET("/auth-role/role-list", this.Index)
 	g.GET("/auth-role/role-add", this.Add)
 	g.POST("/auth-role/role-add-post", this.AddPost)
-	g.GET("/auth-role/role-edit", this.Edit)
+	g.GET("/auth-role/role-edit/:id", this.Edit)
 	g.POST("/auth-role/role-edit-post", this.EditPost)
 	g.GET("/auth-role/role-delete", this.Delete)
 }
@@ -36,7 +36,7 @@ func (this *Role) Index(ctx *gin.Context) {
 	rol, _ := dao.DefaultRoleDao.Find(ctx, controller.PAGESIZE)
 	count := dao.DefaultRoleDao.Count(ctx)
 	pageHtml := page.NewPage().Pagination(p, controller.PAGESIZE, count, param)
-	this.Render(ctx, "backend/member/index.html", gin.H{
+	this.Render(ctx, "backend/role/index.html", gin.H{
 		"list":      rol,
 		"page":      pageHtml,
 		"role_name": roleName,

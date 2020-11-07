@@ -58,7 +58,11 @@ func (this *Member) Index(ctx *gin.Context) {
 
 //添加用户
 func (this *Member) Add(ctx *gin.Context) {
-	this.Render(ctx, "backend/member/add.html", nil)
+	//获取所有角色
+	roles, _ := dao.DefaultRoleDao.GetAllRoleList()
+	this.Render(ctx, "backend/member/add.html", gin.H{
+		"Roles": roles,
+	})
 }
 
 //添加用户提交
@@ -83,10 +87,13 @@ func (this *Member) AddPost(ctx *gin.Context) {
 
 //编辑用户
 func (this *Member) Edit(ctx *gin.Context) {
+	//获取所有角色
+	roles, _ := dao.DefaultRoleDao.GetAllRoleList()
 	//获取一个用户
 	user, _ := dao.DefaultUserDao.GetOneUserInfo(ctx)
 	this.Render(ctx, "backend/member/edit.html", gin.H{
 		"UserInfo": user,
+		"Roles":    roles,
 	})
 }
 

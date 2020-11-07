@@ -44,10 +44,10 @@ func (f Files) Find(DB *gorm.DB, page, pageSize int) ([]*Files, error) {
 	mod = DB.Model(&f)
 	if f.ID != 0 {
 		mod = mod.Where("id = ?", f.ID)
-	}
-
-	if f.Url != "" {
-		mod = mod.Where("url = ?", f.Url)
+	}else {
+		if f.Url != "" {
+			mod = mod.Where("url = ?", f.Url)
+		}
 	}
 
 	if err := mod.Offset(offset).Limit(pageSize).Order("ctime desc,id desc").Find(&fileSlice).Error; err != nil {

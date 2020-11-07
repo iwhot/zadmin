@@ -88,3 +88,9 @@ func (r role) Delete(ctx *gin.Context) error {
 
 	return rol.Delete(masterDB)
 }
+
+//获取所有记录
+func (r role) GetAllRoleList() ([]*model.Role, error) {
+	var rol = model.Role{}
+	return rol.GetAllRoleList(masterDB)
+}

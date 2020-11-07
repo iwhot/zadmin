@@ -11,7 +11,11 @@ type Role struct {
 	RoleName  string `gorm:"column:role_name;type:varchar(20);unique_index;not null;default:''" json:"role_name"`
 	RoleCtime uint32 `gorm:"column:role_ctime;type:int(10);not null;default:0" json:"role_ctime"`
 	RoleUtime uint32 `gorm:"column:role_utime;type:int(10);not null;default:0" json:"role_utime"`
-	RoleDesc  string `gorm:"column:desc;type:varchar(1000);unique_index;not null;default:''" json:"role_desc"`
+	RoleDesc  string `gorm:"column:role_desc;type:varchar(1000);unique_index;not null;default:''" json:"role_desc"`
+}
+
+func (u Role) TableName() string {
+	return Prefix + "role"
 }
 
 //获取角色列表
@@ -23,15 +27,15 @@ func (r Role) GetRoleList(DB *gorm.DB, page, pageSize int) ([]*Role, error) {
 
 	mod = DB.Model(&r)
 
-	if r.RoleName != "" {
-		mod = mod.Where("role_name like ?", "%"+r.RoleName+"%")
-	}
-
 	if r.ID != 0 {
 		mod = mod.Where("id = ?", r.ID)
+	}else {
+		if r.RoleName != "" {
+			mod = mod.Where("role_name like ?", "%"+r.RoleName+"%")
+		}
 	}
 
-	if err := mod.Where("is_del = ?", 0).Offset(offset).Limit(pageSize).Order("utime desc,id desc").Find(&roles).Error; err != nil {
+	if err := mod.Offset(offset).Limit(pageSize).Order("role_utime desc,id desc").Find(&roles).Error; err != nil {
 		return nil, err
 	}
 
@@ -50,13 +54,13 @@ func (r Role) Update(DB *gorm.DB) error {
 
 //获取一个角色
 func (r Role) FindOne(DB *gorm.DB) (*Role, error) {
-	if r.ID == 0 || r.RoleName == "" {
+	if r.ID == 0 && r.RoleName == "" {
 		return nil, errors.New("角色不存在")
 	}
 
 	roles, err := r.GetRoleList(DB, 0, 1)
 	if err != nil {
-		return nil, err
+		return &Role{}, err
 	}
 
 	return roles[0], nil
@@ -72,7 +76,7 @@ func (r Role) Delete(DB *gorm.DB) error {
 		return err
 	}
 
-	//如果角色已经绑定用户则不允许删除
+	//外键约束，如果角色已经绑定用户则不允许删除 done.
 
 	//删除角色
 	if err = tx.Delete(&rs).Error; err != nil {
@@ -90,7 +94,7 @@ func (r Role) Delete(DB *gorm.DB) error {
 func (r Role) Count(DB *gorm.DB) int {
 	var count int
 	var mod *gorm.DB
-
+	mod = DB.Model(&r)
 	if r.RoleName != "" {
 		mod = mod.Where("role_name like ?", "%"+r.RoleName+"%")
 	}
@@ -100,4 +104,14 @@ func (r Role) Count(DB *gorm.DB) int {
 	}
 
 	return count
+}
+
+//获取所有角色
+func (r Role) GetAllRoleList(DB *gorm.DB) ([]*Role, error) {
+	var roles []*Role
+	if err := DB.Model(&r).Find(&roles).Error; err != nil {
+		return roles, err
+	}
+
+	return roles, nil
 }

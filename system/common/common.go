@@ -182,7 +182,7 @@ func CreateSalt(n int) string {
 	arr := strings.Split(str, "")
 	var l = len(arr)
 	for i := 0; i < n; i++ {
-		res = append(res, arr[rand.Int31n(int32(l))-1])
+		res = append(res, arr[rand.Int31n(int32(l)-1)])
 	}
 
 	return strings.Join(res, "")

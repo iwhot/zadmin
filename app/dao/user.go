@@ -28,6 +28,10 @@ func (u user) GetUserList(ctx *gin.Context, pz int) ([]*model.User, error) {
 
 //添加用户
 func (u user) AddUser(ctx *gin.Context, spath string) error {
+	var role_id, _ = strconv.Atoi(ctx.PostForm("role_id"))
+	if role_id == 0 {
+		return errors.New("角色必须选择")
+	}
 	//手工验证密码
 	var passwd = ctx.PostForm("password")
 	var repasswd = ctx.PostForm("repassword")
@@ -59,6 +63,7 @@ func (u user) AddUser(ctx *gin.Context, spath string) error {
 		Utime:    uint32(t),
 		Ltime:    uint32(t),
 		Salt:     salt,
+		RoleID:   uint32(role_id),
 	}
 
 	return usr.AddUser(masterDB, spath)
@@ -86,6 +91,10 @@ func (u user) Count(ctx *gin.Context) int {
 
 //编辑用户
 func (u user) Update(ctx *gin.Context, spath string) error {
+	var role_id, _ = strconv.Atoi(ctx.PostForm("role_id"))
+	if role_id == 0 {
+		return errors.New("角色必须选择")
+	}
 	//手工验证密码
 	var passwd = ctx.PostForm("password")
 	var repasswd = ctx.PostForm("repassword")
@@ -117,6 +126,7 @@ func (u user) Update(ctx *gin.Context, spath string) error {
 			Utime:    uint32(t),
 			Salt:     salt,
 			Password: pwd,
+			RoleID:   uint32(role_id),
 		}
 
 		return usr.UpdateUser(masterDB, spath)
@@ -129,6 +139,7 @@ func (u user) Update(ctx *gin.Context, spath string) error {
 			Desc:   ctx.PostForm("desc"),
 			Email:  ctx.PostForm("email"),
 			Utime:  uint32(t),
+			RoleID: uint32(role_id),
 		}
 
 		return usr.UpdateUser(masterDB, spath)

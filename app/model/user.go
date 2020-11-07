@@ -26,6 +26,8 @@ type User struct {
 	Avatar   string `gorm:"column:avatar;type:varchar(255);unique_index;not null;default:''" json:"avatar"`    //头像
 	State    uint8  `gorm:"column:state;type:tinyint(2);not null;default:1" json:"state"`                      //状态
 	Desc     string `gorm:"column:desc;type:varchar(1000);unique_index;not null;default:''" json:"desc"`       //描述
+	Role     Role   //user属于role，role_id为外键
+	RoleID   uint32
 }
 
 func (u User) TableName() string {
@@ -39,21 +41,22 @@ func (u User) GetUserList(DB *gorm.DB, page, pageSize int) ([]*User, error) {
 	var mod *gorm.DB
 
 	mod = DB.Model(&u)
-	//where条件
-	if u.Username != "" {
-		mod = mod.Where("username like ?", "%"+u.Username+"%")
-	}
-
-	if u.Rname != "" {
-		mod = mod.Where("rname like ?", "%"+u.Rname+"%")
-	}
-
-	if u.Email != "" {
-		mod = mod.Where("email like ?", "%"+u.Email+"%")
-	}
 
 	if u.ID != 0 {
 		mod = mod.Where("id = ?", u.ID)
+	} else {
+		//where条件
+		if u.Username != "" {
+			mod = mod.Where("username like ?", "%"+u.Username+"%")
+		}
+
+		if u.Rname != "" {
+			mod = mod.Where("rname like ?", "%"+u.Rname+"%")
+		}
+
+		if u.Email != "" {
+			mod = mod.Where("email like ?", "%"+u.Email+"%")
+		}
 	}
 
 	if err := mod.Where("is_del = ?", 0).Offset(offset).Limit(pageSize).Order("utime desc,id desc").Find(&userSlice).Error; err != nil {
@@ -197,21 +200,22 @@ func (u User) GetOneUserInfo(DB *gorm.DB) (*User, error) {
 func (u User) Count(DB *gorm.DB) int {
 	var count int
 	var mod = DB.Model(&u)
-	//where条件
-	if u.Username != "" {
-		mod.Where("username like ?", "%"+u.Username+"%")
-	}
-
-	if u.Rname != "" {
-		mod.Where("rname like ?", "%"+u.Rname+"%")
-	}
-
-	if u.Email != "" {
-		mod.Where("email like ?", "%"+u.Email+"%")
-	}
 
 	if u.ID != 0 {
 		mod.Where("id = ?", u.ID)
+	} else {
+		//where条件
+		if u.Username != "" {
+			mod.Where("username like ?", "%"+u.Username+"%")
+		}
+
+		if u.Rname != "" {
+			mod.Where("rname like ?", "%"+u.Rname+"%")
+		}
+
+		if u.Email != "" {
+			mod.Where("email like ?", "%"+u.Email+"%")
+		}
 	}
 
 	if err := mod.Count(&count).Error; err != nil {
