@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 08/11/2020 22:38:28
+ Date: 08/11/2020 23:37:13
 */
 
 SET NAMES utf8mb4;
@@ -47,6 +47,7 @@ CREATE TABLE `zs_menu`  (
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '菜单图标',
   `remark` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '描述',
   `mname` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '菜单名称',
+  `type` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0普通地址，1跳转url',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `url`(`url`) USING BTREE,
   INDEX `pid`(`pid`) USING BTREE,
