@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 06/11/2020 16:26:50
+ Date: 08/11/2020 22:38:28
 */
 
 SET NAMES utf8mb4;
@@ -33,6 +33,28 @@ CREATE TABLE `zs_files`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件管理器' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for zs_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `zs_menu`;
+CREATE TABLE `zs_menu`  (
+  `id` smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '菜单id',
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '菜单地址',
+  `condition` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '附加参数',
+  `pid` smallint(6) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父级菜单id',
+  `ordernum` int(10) NOT NULL DEFAULT 1000 COMMENT '排序',
+  `ctime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `utime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '修改时间',
+  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '菜单图标',
+  `remark` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `mname` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '菜单名称',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `url`(`url`) USING BTREE,
+  INDEX `pid`(`pid`) USING BTREE,
+  INDEX `mname`(`mname`) USING BTREE,
+  CONSTRAINT `pid` FOREIGN KEY (`pid`) REFERENCES `zs_menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for zs_role
 -- ----------------------------
 DROP TABLE IF EXISTS `zs_role`;
@@ -45,6 +67,16 @@ CREATE TABLE `zs_role`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `role_name`(`role_name`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for zs_role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `zs_role_menu`;
+CREATE TABLE `zs_role_menu`  (
+  `role_id` smallint(6) UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色id',
+  `menu_id` smallint(6) UNSIGNED NOT NULL DEFAULT 0 COMMENT '菜单id',
+  PRIMARY KEY (`role_id`, `menu_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色-菜单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for zs_user
@@ -66,19 +98,12 @@ CREATE TABLE `zs_user`  (
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '头像',
   `state` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态：0关闭，1启用',
   `desc` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '描述',
+  `role_id` smallint(6) UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色id',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `username`(`username`) USING BTREE,
-  UNIQUE INDEX `email`(`email`) USING BTREE
+  UNIQUE INDEX `email`(`email`) USING BTREE,
+  INDEX `role_id`(`role_id`) USING BTREE,
+  CONSTRAINT `role_id` FOREIGN KEY (`role_id`) REFERENCES `zs_role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for zs_user_role
--- ----------------------------
-DROP TABLE IF EXISTS `zs_user_role`;
-CREATE TABLE `zs_user_role`  (
-  `user_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
-  `role_id` smallint(6) UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色id',
-  PRIMARY KEY (`user_id`, `role_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户-角色表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
