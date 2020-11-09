@@ -41,6 +41,8 @@ func (m Menu) GetMenuList(DB *gorm.DB, page, pageSize int) ([]*Menu, error) {
 
 		if m.PID != 0 {
 			mod = mod.Where("pid = ?", m.PID)
+		}else {
+			mod = mod.Where("pid = ?", 0)
 		}
 	}
 
@@ -68,7 +70,27 @@ func (m Menu) Delete(DB *gorm.DB) error {
 		return errors.New("菜单不存在")
 	}
 
-	return DB.Delete(&m).Error
+	var out []*Menu
+	tx := DB.Begin()
+
+	if err := tx.Model(&m).Where("pid=?", m.ID).Offset(0).Limit(1).First(&out).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	//如果有子菜单不给删除
+	if len(out) > 0 {
+		tx.Rollback()
+		return errors.New("有子菜单不允许删除")
+	}
+
+	if err := tx.Delete(&m).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+	return nil
 }
 
 //获取一个菜单
@@ -104,12 +126,10 @@ func (m Menu) Count(DB *gorm.DB) int {
 }
 
 //获取所有菜单
-func (m Menu) GetMenuByPid(DB *gorm.DB) ([]*Menu, error) {
+func (m Menu) GetAllMenuList(DB *gorm.DB) ([]*Menu, error) {
 	var menus []*Menu
-
-	if err := DB.Model(&m).Where("pid = ?", m.PID).Order("pid asc").Find(&menus).Error; err != nil {
+	if err := DB.Model(&m).Order("pid asc").Find(&menus).Error; err != nil {
 		return nil, err
 	}
-
 	return menus, nil
 }

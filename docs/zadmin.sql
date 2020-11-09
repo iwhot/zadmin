@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 08/11/2020 23:37:13
+ Date: 09/11/2020 16:26:20
 */
 
 SET NAMES utf8mb4;
@@ -49,10 +49,9 @@ CREATE TABLE `zs_menu`  (
   `mname` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '菜单名称',
   `type` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0普通地址，1跳转url',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `url`(`url`) USING BTREE,
+  INDEX `url`(`url`) USING BTREE,
   INDEX `pid`(`pid`) USING BTREE,
-  INDEX `mname`(`mname`) USING BTREE,
-  CONSTRAINT `pid` FOREIGN KEY (`pid`) REFERENCES `zs_menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  INDEX `mname`(`mname`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------

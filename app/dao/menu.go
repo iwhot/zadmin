@@ -91,7 +91,7 @@ func (m menu) Update(ctx *gin.Context) error {
 func (m menu) Delete(ctx *gin.Context) error {
 	var id, _ = strconv.Atoi(ctx.Query("id"))
 	if id == 0 {
-		return errors.New("角色不存在")
+		return errors.New("菜单不存在")
 	}
 
 	var me = model.Menu{
@@ -112,10 +112,17 @@ func (m menu) GetOneMenu(ctx *gin.Context) (*model.Menu, error) {
 	return me.GetOneMenu(masterDB)
 }
 
-//根据pid获取列表
-func (m menu) GetMenuByPid(pid uint32) ([]*model.Menu, error) {
+//获取所有列表
+func (m menu) GetAllMenuList() ([]*model.Menu, error) {
+	var me = model.Menu{}
+	return me.GetAllMenuList(masterDB)
+}
+
+//根据id获取一条记录
+func (m menu) FindOneToID(id uint32) (*model.Menu, error) {
 	var me = model.Menu{
-		PID: pid,
+		ID: id,
 	}
-	return me.GetMenuByPid(masterDB)
+
+	return me.GetOneMenu(masterDB)
 }

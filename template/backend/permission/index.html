@@ -1,0 +1,110 @@
+{{define "backend/permission/index.html"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>会员管理</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	{{template "backend/public/header.html"}}
+</head>
+<body>
+<!--面包屑导航-->
+<div class="ok-nav">
+	  <span class="layui-breadcrumb">
+		<a href="#">首页</a>
+		<a href="#">会员管理</a>
+		<a href="/backend/auth-permission/permission-list?pid=0">菜单列表</a>
+		{{range $k,$v := .Breadcrumbs}}
+		  <a href="/backend/auth-permission/permission-list?pid={{$v.ID}}">{{$v.Mname}}</a>
+		{{end}}
+	  </span>
+</div>
+
+<div class="ok-body">
+
+	<!--数据表格-->
+	<div class="layui-row">
+
+		<form class="layui-form ok-search-form" action="/backend/auth-permission/permission-list" method="get">
+			<div class="layui-form-item">
+
+				<div class="layui-inline">
+					<label class="layui-form-label">菜单名称</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" placeholder="菜单名称" autocomplete="off" name="mname" value="{{.mname}}">
+					</div>
+				</div>
+
+				<div class="layui-inline">
+					<div class="layui-input-inline">
+						<input type="hidden" name="pid" value="{{.pid}}">
+						<button class="layui-btn" type="submit">
+							<i class="layui-icon">&#xe615;</i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<div class="layui-card-header">
+			<a class="layui-btn layui-btn-sm" onclick="layui.okLayer.open('添加菜单', '/backend/auth-permission/permission-add', '90%', '90%')">添加菜单</a>
+		</div>
+
+		<form action="" id="tableForm">
+			<table class="layui-table" lay-filter="tableFilter">
+				<!--, fixed: 'left',width:100  , fixed: 'right',width:250-->
+				<thead>
+					<tr>
+						<th lay-data="{field:'id'}">ID</th>
+						<th lay-data="{field:'mname'}">菜单名</th>
+						<th lay-data="{field:'type'}">菜单类型</th>
+						<th lay-data="{field:'url'}">菜单地址</th>
+						<th lay-data="{field:'remark'}">描述</th>
+						<th lay-data="{field:'ctime'}">创建时间</th>
+						<th lay-data="{field:'utime'}">修改时间</th>
+						<th lay-data="{field:'manage'}">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{range $k,$v := .list}}
+					<tr>
+						<td>{{$v.ID}}</td>
+						<td><a href="/backend/auth-permission/permission-list?pid={{$v.ID}}">{{$v.Mname}}</a></td>
+						<td>
+							{{if eq .Type 0}}
+								普通菜单
+								{{else}}
+								外链地址
+							{{end}}
+
+						</td>
+						<td>{{$v.Url}}</td>
+						<td>{{$v.Remark}}</td>
+						<td>{{UnixToDateTime $v.Ctime}}</td>
+						<td>{{UnixToDateTime $v.Utime}}</td>
+						<td>
+							<a title="编辑"  onclick="layui.okLayer.open('编辑菜单', '/backend/auth-permission/permission-edit/{{$v.ID}}', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
+								编辑
+							</a>&nbsp;&nbsp;
+
+							<a title="删除" onclick="delete_column({{$v.ID}},'/backend/auth-permission/permission-delete')" href="javascript:;" style="color: #2D8CF0">
+								删除
+							</a>
+						</td>
+					</tr>
+					{{end}}
+				</tbody>
+			</table>
+		</form>
+		<div class="layui-laypage">
+			{{.page}}
+		</div>
+
+
+	</div>
+</div>
+<!--js逻辑-->
+{{template "backend/public/footer.html"}}
+</body>
+</html>
+{{end}}
