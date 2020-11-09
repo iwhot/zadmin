@@ -12,6 +12,7 @@ type Role struct {
 	RoleCtime uint32 `gorm:"column:role_ctime;type:int(10);not null;default:0" json:"role_ctime"`
 	RoleUtime uint32 `gorm:"column:role_utime;type:int(10);not null;default:0" json:"role_utime"`
 	RoleDesc  string `gorm:"column:role_desc;type:varchar(1000);unique_index;not null;default:''" json:"role_desc"`
+	RoleMenu []Menu `gorm:"many2many:user_menu" json:"role_menu"`//多对多
 }
 
 func (u Role) TableName() string {
