@@ -102,3 +102,13 @@ func (this *Role) Delete(ctx *gin.Context) {
 
 	this.JSON(ctx, gin.H{"code": 1, "msg": "删除角色成功"})
 }
+
+//权限
+func (this *Role) Auth(ctx *gin.Context) {
+
+}
+
+//权限提交
+func (this *Role) AuthPost(ctx *gin.Context) {
+
+}
