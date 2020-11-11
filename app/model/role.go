@@ -12,7 +12,7 @@ type Role struct {
 	RoleCtime uint32 `gorm:"column:role_ctime;type:int(10);not null;default:0" json:"role_ctime"`
 	RoleUtime uint32 `gorm:"column:role_utime;type:int(10);not null;default:0" json:"role_utime"`
 	RoleDesc  string `gorm:"column:role_desc;type:varchar(1000);unique_index;not null;default:''" json:"role_desc"`
-	RoleMenu []Menu `gorm:"many2many:user_menu" json:"role_menu"`//多对多
+	//RoleMenu []Menu `gorm:"many2many:zs_role_menu" json:"role_menu"`//多对多(=@__@=)
 }
 
 func (u Role) TableName() string {
@@ -30,7 +30,7 @@ func (r Role) GetRoleList(DB *gorm.DB, page, pageSize int) ([]*Role, error) {
 
 	if r.ID != 0 {
 		mod = mod.Where("id = ?", r.ID)
-	}else {
+	} else {
 		if r.RoleName != "" {
 			mod = mod.Where("role_name like ?", "%"+r.RoleName+"%")
 		}
@@ -44,13 +44,77 @@ func (r Role) GetRoleList(DB *gorm.DB, page, pageSize int) ([]*Role, error) {
 }
 
 //添加角色
-func (r Role) AddRole(DB *gorm.DB) error {
-	return DB.Create(&r).Error
+func (r Role) AddRole(DB *gorm.DB, me []uint32) error {
+	tx := DB.Begin()
+
+	//角色添加
+	if err := tx.Create(&r).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	//删除角色相关权限
+	if err := tx.Where("role_id=?", r.ID).Delete(RoleMenu{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	//角色权限添加
+	if len(me) < 1 {
+		tx.Commit()
+		return nil
+	}
+
+	for _, v := range me {
+		var rm = RoleMenu{
+			RoleID: r.ID,
+			MenuID: v,
+		}
+
+		if err := tx.Create(&rm).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	tx.Commit()
+	return nil
 }
 
 //编辑角色
-func (r Role) Update(DB *gorm.DB) error {
-	return DB.Model(&r).Updates(r).Error
+func (r Role) Update(DB *gorm.DB, me []uint32) error {
+	tx := DB.Begin()
+
+	if err := DB.Model(&r).Updates(r).Error;err != nil{
+		tx.Rollback()
+		return err
+	}
+
+	//删除角色相关权限
+	if err := tx.Where("role_id=?", r.ID).Delete(RoleMenu{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if len(me) < 1 {
+		tx.Commit()
+		return nil
+	}
+
+	for _, v := range me {
+		var rm = RoleMenu{
+			RoleID: r.ID,
+			MenuID: v,
+		}
+
+		if err := tx.Create(&rm).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	tx.Commit()
+	return nil
 }
 
 //获取一个角色

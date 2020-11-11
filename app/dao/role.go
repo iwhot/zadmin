@@ -36,7 +36,6 @@ func (r role) Count(ctx *gin.Context) int {
 //添加
 func (r role) Create(ctx *gin.Context) error {
 	var t = time.Now().Unix()
-
 	var rol = model.Role{
 		RoleName:  ctx.PostForm("role_name"),
 		RoleCtime: uint32(t),
@@ -44,7 +43,17 @@ func (r role) Create(ctx *gin.Context) error {
 		RoleDesc:  ctx.PostForm("role_desc"),
 	}
 
-	return rol.AddRole(masterDB)
+	var menu = ctx.PostFormMap("menu")
+	var me []uint32
+
+	for _, v := range menu {
+		id1, _ := strconv.Atoi(v)
+		if id1 > 0 {
+			me = append(me, uint32(id1))
+		}
+	}
+
+	return rol.AddRole(masterDB,me)
 }
 
 //获取一条记录
@@ -72,7 +81,17 @@ func (r role) Update(ctx *gin.Context) error {
 		RoleDesc:  ctx.PostForm("role_desc"),
 	}
 
-	return rol.Update(masterDB)
+	var menu = ctx.PostFormMap("menu")
+	var me []uint32
+
+	for _, v := range menu {
+		id1, _ := strconv.Atoi(v)
+		if id1 > 0 {
+			me = append(me, uint32(id1))
+		}
+	}
+
+	return rol.Update(masterDB,me)
 }
 
 //删除

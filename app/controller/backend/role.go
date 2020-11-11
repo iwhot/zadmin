@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/iwhot/zadmin/app/controller"
 	"github.com/iwhot/zadmin/app/dao"
+	"github.com/iwhot/zadmin/app/logic"
 	"github.com/iwhot/zadmin/app/validate"
 	"github.com/iwhot/zadmin/system/page"
 )
@@ -20,6 +21,7 @@ func (this *Role) NewRouter(g *gin.RouterGroup) {
 	g.GET("/auth-role/role-edit/:id", this.Edit)
 	g.POST("/auth-role/role-edit-post", this.EditPost)
 	g.GET("/auth-role/role-delete", this.Delete)
+	g.GET("/auth-role/role-auth", this.Auth)
 }
 
 //角色列表
@@ -105,10 +107,14 @@ func (this *Role) Delete(ctx *gin.Context) {
 
 //权限
 func (this *Role) Auth(ctx *gin.Context) {
+	ral, _ := dao.DefaultMenuDao.GetAllMenuList()
 
-}
+	r, _ := dao.DefaultRoleMenuDao.GetOneRoleMenuList(ctx)
+	var chk []uint32
+	for _, v := range r {
+		chk = append(chk, v.ID)
+	}
 
-//权限提交
-func (this *Role) AuthPost(ctx *gin.Context) {
-
+	RoleMenuTree := logic.GetRoleMenuNode(ral, 0, chk)
+	this.JSON(ctx, RoleMenuTree)
 }

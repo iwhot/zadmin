@@ -41,7 +41,7 @@ func (m Menu) GetMenuList(DB *gorm.DB, page, pageSize int) ([]*Menu, error) {
 
 		if m.PID != 0 {
 			mod = mod.Where("pid = ?", m.PID)
-		}else {
+		} else {
 			mod = mod.Where("pid = ?", 0)
 		}
 	}
@@ -85,6 +85,12 @@ func (m Menu) Delete(DB *gorm.DB) error {
 	}
 
 	if err := tx.Delete(&m).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	//删除role_menu数据
+	if err := tx.Where("menu_id=?", m.ID).Delete(RoleMenu{}).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

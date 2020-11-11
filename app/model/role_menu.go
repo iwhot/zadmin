@@ -3,7 +3,6 @@ package model
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	"log"
 )
 
 type RoleMenu struct {
@@ -16,27 +15,25 @@ func (rm RoleMenu) TableName() string {
 }
 
 //创建
-func (r Role) CreateRoleMenu() {
+func (rm RoleMenu) CreateRoleMenu() {
 
 }
 
-
 //删除
-func (r Role) DeleteRoleMenu() {
+func (rm RoleMenu) DeleteRoleMenu() {
 
 }
 
 //获取某角色菜单
-func (r Role) GetOneRoleMenuList(DB *gorm.DB) (*Role, error) {
-	if r.ID == 0 {
+func (rm RoleMenu) GetOneRoleMenuList(DB *gorm.DB) ([]*Menu, error) {
+	if rm.RoleID == 0 {
 		return nil, errors.New("角色不存在")
 	}
 
-	var m []Menu
-	if err := DB.Model(&r).Related(&m, "RoleMenu").Error; err != nil {
+	var m []*Menu
+
+	if err := DB.Table(Prefix+"role_menu rm").Joins("left join menu m on m.id=rm.menu_id").Where("rm.role_id=?", rm.RoleID).Find(&m).Error; err != nil {
 		return nil, err
 	}
-	log.Println(r)
-	log.Println(m)
-	return &r, nil
+	return m, nil
 }
