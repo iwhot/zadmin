@@ -19,6 +19,13 @@
 			</div>
 		</div>
 
+		<div class="layui-form-item">
+			<label class="layui-form-label">角色权限</label>
+			<div class="layui-input-block">
+				<div id="role_menu" class="demo-tree-more"></div>
+			</div>
+		</div>
+
 		<div class="layui-form-item layui-form-text">
 			<label class="layui-form-label">备注</label>
 			<div class="layui-input-block">
@@ -37,6 +44,37 @@
 </div>
 <!--js逻辑-->
 {{template "backend/public/footer.html"}}
+
+<script type="text/javascript">
+	layui.use(['tree', 'util','jquery'], function(){
+		var tree = layui.tree
+				,layer = layui.layer
+				,$ = layui.jquery;
+
+		var id = $("input[name=id]").val();
+		$.ajax({
+			url:"/backend/auth-role/role-auth",
+			data: {id:id},
+			dataType:"json",
+			type:"get",
+			success:function (data) {
+				tree.render({
+					elem: '#role_menu'
+					,data: data
+					,showCheckbox: true  //是否显示复选框
+					,id: 'role_menu1'
+					,isJump: false //是否允许点击节点时弹出新窗口跳转
+					// ,click: function(obj){
+					// 	var data = obj.data;  //获取当前点击的节点数据
+					// 	layer.msg('状态：'+ obj.state + '<br>节点数据：' + JSON.stringify(data));
+					// }
+				});
+			}
+		});
+
+	});
+</script>
+
 </body>
 </html>
 {{end}}

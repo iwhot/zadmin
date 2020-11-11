@@ -85,7 +85,7 @@ func (r Role) AddRole(DB *gorm.DB, me []uint32) error {
 func (r Role) Update(DB *gorm.DB, me []uint32) error {
 	tx := DB.Begin()
 
-	if err := DB.Model(&r).Updates(r).Error;err != nil{
+	if err := DB.Model(&r).Updates(r).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -141,8 +141,6 @@ func (r Role) Delete(DB *gorm.DB) error {
 		return err
 	}
 
-	//外键约束，如果角色已经绑定用户则不允许删除 done.
-
 	//删除角色
 	if err = tx.Delete(&rs).Error; err != nil {
 		tx.Rollback()
@@ -150,6 +148,10 @@ func (r Role) Delete(DB *gorm.DB) error {
 	}
 
 	//删除角色下的权限
+	if err := DB.Where("role_id=?", r.ID).Delete(RoleMenu{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
 
 	tx.Commit()
 	return nil

@@ -32,7 +32,7 @@ func (rm RoleMenu) GetOneRoleMenuList(DB *gorm.DB) ([]*Menu, error) {
 
 	var m []*Menu
 
-	if err := DB.Table(Prefix+"role_menu rm").Joins("left join menu m on m.id=rm.menu_id").Where("rm.role_id=?", rm.RoleID).Find(&m).Error; err != nil {
+	if err := DB.Table(Prefix+"role_menu rm").Select("m.*").Joins("left join "+Prefix+"menu m on m.id=rm.menu_id").Where("rm.role_id=?", rm.RoleID).Find(&m).Error; err != nil {
 		return nil, err
 	}
 	return m, nil
