@@ -199,13 +199,6 @@ return false;
 //    }
 //};
 
-//Console
-try {
-    if (window.console && window.console.log) {
-        console.log("\n欢迎访问木庄网络博客！\n\n");
-        console.log("\n请记住我们的网址：%c www.muzhuangnet.com", "color:red");
-    }
-} catch (e) { };
 
 //搜索查询
 function SiteSearch(send_url, divTgs) {

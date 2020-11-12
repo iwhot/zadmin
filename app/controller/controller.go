@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	PAGESIZE = 20 //一页条数
+	PAGESIZE    = 20 //一页条数
 	STORAGEPATH = "storage"
 )
 
@@ -81,8 +81,5 @@ func checkValidator(ctx *gin.Context, valid interface{}, trans ut.Translator) er
 
 //404页面
 func (this *Controller) NotFound(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"code": 404,
-		"msg":  "404 not found !0.0",
-	})
+	this.Render(ctx, "base/404/404.html", nil)
 }
