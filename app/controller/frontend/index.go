@@ -12,7 +12,6 @@ type Index struct {
 func (this *Index) NewRouter(g *gin.RouterGroup) {
 	g.GET("/", this.Index)
 	g.GET("/index.html", this.Index)
-	g.GET("/index.php", this.Index)
 	g.GET("/list", this.List)
 	g.GET("/show", this.Show)
 }

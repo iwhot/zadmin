@@ -11,11 +11,46 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 12/11/2020 11:31:17
+ Date: 16/11/2020 16:05:20
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for zs_ad
+-- ----------------------------
+DROP TABLE IF EXISTS `zs_ad`;
+CREATE TABLE `zs_ad`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '广告id',
+  `title` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '图片标题',
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '图片地址',
+  `pid` smallint(6) UNSIGNED NOT NULL DEFAULT 0 COMMENT '广告位id',
+  `ctime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `utime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `title`(`title`) USING BTREE,
+  INDEX `pid`(`pid`) USING BTREE,
+  CONSTRAINT `pid` FOREIGN KEY (`pid`) REFERENCES `zs_ad_position` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '广告' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for zs_ad_position
+-- ----------------------------
+DROP TABLE IF EXISTS `zs_ad_position`;
+CREATE TABLE `zs_ad_position`  (
+  `id` smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '广告位名称',
+  `with` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '图片宽度',
+  `height` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '图片高度',
+  `type` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '属性：0轮播，1单图',
+  `ctime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `utime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '修改时间',
+  `desc` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '广告位描述',
+  `style` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '额外css样式',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `name`(`name`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '广告位' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for zs_article
@@ -57,6 +92,25 @@ CREATE TABLE `zs_article_tag`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章-标签' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for zs_catalog
+-- ----------------------------
+DROP TABLE IF EXISTS `zs_catalog`;
+CREATE TABLE `zs_catalog`  (
+  `id` smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '菜单id',
+  `name` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `ename` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '英文名',
+  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '图标',
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '地址',
+  `target` enum('_blank','_self') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '_self' COMMENT '打开方式',
+  `state` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '类型:0隐藏，1展示',
+  `ctime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `utime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `name`(`name`) USING BTREE,
+  INDEX `ename`(`ename`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '前台目录' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for zs_category
 -- ----------------------------
 DROP TABLE IF EXISTS `zs_category`;
@@ -80,6 +134,21 @@ CREATE TABLE `zs_category`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '栏目分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for zs_config
+-- ----------------------------
+DROP TABLE IF EXISTS `zs_config`;
+CREATE TABLE `zs_config`  (
+  `id` smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '配置id',
+  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '配置名称',
+  `ename` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '配置英文名',
+  `option` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '待选项',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `ename`(`ename`) USING BTREE,
+  INDEX `name`(`name`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '配置' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for zs_files
 -- ----------------------------
 DROP TABLE IF EXISTS `zs_files`;
@@ -93,6 +162,24 @@ CREATE TABLE `zs_files`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`name`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件管理器' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for zs_links
+-- ----------------------------
+DROP TABLE IF EXISTS `zs_links`;
+CREATE TABLE `zs_links`  (
+  `id` smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '友链id',
+  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '网站名称',
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '地址',
+  `target` enum('_blank','_self') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '_blank' COMMENT '_blank 新页面\r\n_self当前页面',
+  `state` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态：0隐藏，1显示',
+  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '图片地址',
+  `type` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '属性：0文字链接，1图片链接',
+  `ctime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `utime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `name`(`name`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '友情链接' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for zs_menu
