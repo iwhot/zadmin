@@ -1,5 +1,7 @@
 package model
 
+import "github.com/jinzhu/gorm"
+
 type Links struct {
 	ID     uint32 `json:"id"`
 	Name   string `json:"name"`
@@ -14,4 +16,29 @@ type Links struct {
 
 func (l Links) TableName() string {
 	return Prefix + "links"
+}
+
+//添加
+func (l Links) Create(DB *gorm.DB) error {
+	return DB.Create(&l).Error
+}
+
+//更新
+func (l Links) Update(DB *gorm.DB) error {
+	return DB.Model(&l).Updates(l).Error
+}
+
+//删除
+func (l Links) Delete(DB *gorm.DB) error {
+	return DB.Delete(&l).Error
+}
+
+//获取一条
+func (l Links) GetOneLinks(DB *gorm.DB) {
+
+}
+
+//获取列表
+func (l Links) GetLinksList(DB *gorm.DB) {
+
 }

@@ -29,7 +29,7 @@ func main() {
 
 	//设置模板函数要在载入模板前面
 	r.SetFuncMap(template.FuncMap{
-		"UnixToDateTime":common.UnixToDateTime,
+		"UnixToDateTime": common.UnixToDateTime,
 	})
 
 	//載入模板
@@ -37,13 +37,16 @@ func main() {
 	//表单限制上传大小
 	r.MaxMultipartMemory = 8 << 20
 
+	rd, _ := time.ParseDuration(viper.GetString("server.readTimeout"))
+	wd, _ := time.ParseDuration(viper.GetString("server.writeTimeout"))
+
 	//载入路由
 	router.NewRouter(r)
 	s := &http.Server{
 		Addr:           viper.GetString("server.host") + ":" + viper.GetString("server.port"),
 		Handler:        r,
-		ReadTimeout:    time.Duration(viper.GetInt("server.readTimeout")) * time.Second,
-		WriteTimeout:   time.Duration(viper.GetInt("server.writeTimeout")) * time.Second,
+		ReadTimeout:    rd,
+		WriteTimeout:   wd,
 		MaxHeaderBytes: 1 << 20,
 	}
 	//打印错误

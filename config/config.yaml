@@ -1,8 +1,8 @@
 server:
   host: 127.0.0.1
   port: 2020
-  readTimeout: 60
-  writeTimeout: 60
+  readTimeout: 60s
+  writeTimeout: 60s
   mode: debug
 
 
