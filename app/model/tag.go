@@ -8,3 +8,13 @@ type Tag struct {
 func (t Tag) TableName() string {
 	return Prefix + "tag"
 }
+
+//创建
+
+//修改
+
+//删除
+
+//获取一条记录
+
+//获取列表

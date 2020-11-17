@@ -8,3 +8,9 @@ type ArticleTag struct {
 func (a ArticleTag) TableName() string {
 	return Prefix + "article_tag"
 }
+
+//创建
+
+//删除
+
+//获取所有列表

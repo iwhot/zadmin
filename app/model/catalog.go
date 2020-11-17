@@ -15,3 +15,13 @@ type Catalog struct {
 func (c Catalog) TableName() string {
 	return Prefix + "catalog"
 }
+
+//创建
+
+//修改
+
+//删除
+
+//获取一条记录
+
+//获取列表
