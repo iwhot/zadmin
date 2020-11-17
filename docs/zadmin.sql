@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 16/11/2020 17:25:43
+ Date: 17/11/2020 10:28:52
 */
 
 SET NAMES utf8mb4;
@@ -76,10 +76,10 @@ CREATE TABLE `zs_article`  (
   `seo_desc` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'seo描述',
   `uuid` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'uuid',
   PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uuid`(`uuid`) USING BTREE,
   INDEX `title`(`title`) USING BTREE,
   INDEX `short_title`(`short_title`) USING BTREE,
   INDEX `category_id`(`category_id`) USING BTREE,
-  UNIQUE INDEX `uuid`(`uuid`) USING BTREE,
   CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `zs_category` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章' ROW_FORMAT = Dynamic;
 
@@ -131,10 +131,10 @@ CREATE TABLE `zs_category`  (
   `thumb` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '分类图片',
   `uuid` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'uuid',
   PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uuid`(`uuid`) USING BTREE,
   INDEX `pid`(`pid`) USING BTREE,
   INDEX `name`(`name`) USING BTREE,
-  INDEX `ename`(`ename`) USING BTREE,
-  UNIQUE INDEX `uuid`(`uuid`) USING BTREE
+  INDEX `ename`(`ename`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '栏目分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -144,12 +144,9 @@ DROP TABLE IF EXISTS `zs_config`;
 CREATE TABLE `zs_config`  (
   `id` smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '配置id',
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '配置名称',
-  `ename` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '配置英文名',
-  `option` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '待选项',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `ename`(`ename`) USING BTREE,
-  INDEX `name`(`name`) USING BTREE
+  UNIQUE INDEX `name`(`name`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '配置' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
