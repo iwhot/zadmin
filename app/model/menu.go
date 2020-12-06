@@ -84,6 +84,18 @@ func (m Menu) Delete(DB *gorm.DB) error {
 		return errors.New("有子菜单不允许删除")
 	}
 
+	var out2 []*RoleMenu
+	//已经绑定角色不允许删除
+	if err := tx.Model(&RoleMenu{}).Where("menu_id=?", m.ID).Offset(0).Limit(1).First(&out2).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if len(out) > 0 {
+		tx.Rollback()
+		return errors.New("菜单已经绑定角色不允许删除")
+	}
+
 	if err := tx.Delete(&m).Error; err != nil {
 		tx.Rollback()
 		return err

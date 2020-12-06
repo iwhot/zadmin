@@ -20,12 +20,12 @@ func (this *Category) NewRouter(g *gin.RouterGroup) {
 
 //栏目列表
 func (this *Category) Index(ctx *gin.Context) {
-
+	this.Render(ctx, "backend/category/index.html", nil)
 }
 
 //添加栏目
 func (this *Category) Add(ctx *gin.Context) {
-
+	this.Render(ctx, "backend/category/add.html", nil)
 }
 
 //添加栏目提交
@@ -35,7 +35,7 @@ func (this *Category) AddPost(ctx *gin.Context) {
 
 //编辑栏目
 func (this *Category) Edit(ctx *gin.Context) {
-
+	this.Render(ctx, "backend/category/edit.html", nil)
 }
 
 //编辑栏目提交
