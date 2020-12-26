@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	page2 "github.com/iwhot/zadmin/system/page"
 	"github.com/jinzhu/gorm"
 )
 
@@ -26,8 +27,19 @@ func (c Category) TableName() string {
 }
 
 //添加
-func (c Category) Create(DB *gorm.DB) error {
-	return DB.Create(&c).Error
+func (c Category) Create(DB *gorm.DB, spath string) error {
+	tx := DB.Begin()
+	if err := DB.Create(&c).Error;err != nil{
+		tx.Rollback()
+		return err
+	}
+
+	if c.Thumb != ""{
+
+	}
+
+	tx.Commit()
+	return nil
 }
 
 //修改
@@ -36,37 +48,37 @@ func (c Category) Update(DB *gorm.DB) error {
 }
 
 //获取一个分类
-func (c Category) GetOneCategory(DB *gorm.DB) (*Category,error) {
+func (c Category) GetOneCategory(DB *gorm.DB) (*Category, error) {
 	if c.ID == 0 {
 		return nil, errors.New("分类不存在")
 	}
-	var cate *Category
-	if err := DB.Model(&c).Where("id=?",c.ID).Offset(0).Limit(1).First(&cate).Error;err!=nil{
-		return nil,err
+	var cate []*Category
+	if err := DB.Model(&c).Where("id=?", c.ID).Offset(0).Limit(1).First(&cate).Error; err != nil {
+		return nil, err
 	}
-	return cate,nil
+	return cate[0], nil
 }
 
 //删除
 func (c Category) Delete(DB *gorm.DB) error {
 	if c.ID == 0 {
-		return  errors.New("分类不存在")
+		return errors.New("分类不存在")
 	}
 
 	tx := DB.Begin()
 	//有子分类不可删除
 	var cate *Category
 	err := tx.Model(&c).Where("pid=?", c.ID).Offset(0).Limit(1).First(&cate).Error
-	if err == nil && cate != nil{
+	if err == nil && cate != nil {
 		tx.Rollback()
 		return errors.New("分类下有子分类不可删除")
 	}
 
 	//分类下有文章不可删除
 	var art *Article
-	var a  = Article{}
-	err = tx.Model(&a).Where("category_id=?",c.ID).Offset(0).Limit(1).First(&art).Error
-	if err == nil && art != nil{
+	var a = Article{}
+	err = tx.Model(&a).Where("category_id=?", c.ID).Offset(0).Limit(1).First(&art).Error
+	if err == nil && art != nil {
 		tx.Rollback()
 		return errors.New("分类下有文章不可删除")
 	}
@@ -76,8 +88,26 @@ func (c Category) Delete(DB *gorm.DB) error {
 }
 
 //获取分类列表==>后台
-func (c Category) GetCateList(DB *gorm.DB) {
+func (c Category) GetCateList(DB *gorm.DB, page, pageSize int) ([]*Category, error) {
+	var cate = []*Category{}
+	var offset = page2.GetOffset(page, pageSize)
+	var mod *gorm.DB
 
+	mod = DB.Model(&c)
+	//where条件
+	if c.Name != "" {
+		mod = mod.Where("username like ?", "%"+c.Name+"%")
+	}
+
+	if c.PID != 0 {
+		mod = mod.Where("pid=?", c.PID)
+	}
+
+	if err := mod.Where("is_del = ?", 0).Offset(offset).Limit(pageSize).Order("utime desc,id desc").Find(&cate).Error; err != nil {
+		return cate, err
+	}
+
+	return cate, nil
 }
 
 //================= todo 前台部分待定...

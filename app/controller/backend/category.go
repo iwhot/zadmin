@@ -20,6 +20,7 @@ func (this *Category) NewRouter(g *gin.RouterGroup) {
 
 //栏目列表
 func (this *Category) Index(ctx *gin.Context) {
+
 	this.Render(ctx, "backend/category/index.html", nil)
 }
 

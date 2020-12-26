@@ -2,7 +2,6 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/iwhot/zadmin/app/controller"
 	"github.com/iwhot/zadmin/app/controller/api"
 	"github.com/iwhot/zadmin/app/controller/backend"
 	"github.com/iwhot/zadmin/app/controller/frontend"
@@ -10,8 +9,8 @@ import (
 )
 
 func NewRouter(r *gin.Engine) {
-	//设置默认路由当访问一个错误网站时返回
-	r.NoRoute(new(controller.Controller).NotFound)
+	//设置默认路由当访问一个错误网站时返回,后面用中间件处理
+	//r.NoRoute(new(controller.Controller).NotFound)
 	//前台
 	front := r.Group("")
 	{

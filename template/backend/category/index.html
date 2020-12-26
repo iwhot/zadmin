@@ -1,0 +1,110 @@
+{{define "backend/member/index.html"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>会员管理</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	{{template "backend/public/header.html"}}
+</head>
+<body>
+<!--面包屑导航-->
+<div class="ok-nav">
+	  <span class="layui-breadcrumb">
+		<a href="#">首页</a>
+		<a href="#">会员管理</a>
+		  <a><cite>用户列表</cite></a>
+	  </span>
+</div>
+
+<div class="ok-body">
+
+	<!--数据表格-->
+	<div class="layui-row">
+
+		<form class="layui-form ok-search-form" action="/backend/member/user-list" method="get">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">账号</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" placeholder="账号" autocomplete="off" name="username" value="{{.username}}">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">昵称</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" placeholder="昵称" autocomplete="off" name="rname" value="{{.rname}}">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">邮箱</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" placeholder="邮箱" autocomplete="off" name="email" value="{{.email}}">
+					</div>
+				</div>
+
+				<div class="layui-inline">
+					<div class="layui-input-inline">
+						<button class="layui-btn" type="submit">
+							<i class="layui-icon">&#xe615;</i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<div class="layui-card-header">
+			<a class="layui-btn layui-btn-sm" onclick="layui.okLayer.open('添加用户', '/backend/member/user-add', '90%', '90%')">添加用户</a>
+		</div>
+
+		<form action="" id="tableForm">
+			<table class="layui-table" lay-filter="tableFilter">
+				<!--, fixed: 'left',width:100  , fixed: 'right',width:250-->
+				<thead>
+					<tr>
+						<th lay-data="{field:'id'}">ID</th>
+						<th lay-data="{field:'username'}">用户名</th>
+						<th lay-data="{field:'rname'}">昵称</th>
+						<th lay-data="{field:'email'}">邮箱</th>
+						<th lay-data="{field:'ctime'}">创建时间</th>
+						<th lay-data="{field:'ltime'}">登陆时间</th>
+						<th lay-data="{field:'manage'}">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{range $k,$v := .list}}
+					<tr>
+						<td>{{$v.ID}}</td>
+						<td>{{$v.Username}}</td>
+						<td>{{$v.Rname}}</td>
+						<td>{{$v.Email}}</td>
+						<td>{{UnixToDateTime $v.Ctime}}</td>
+						<td>{{UnixToDateTime $v.Ltime}}</td>
+						<td>
+							<a title="编辑"  onclick="layui.okLayer.open('编辑用户', '/backend/member/user-edit/{{$v.ID}}', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
+								编辑
+							</a>&nbsp;&nbsp;
+
+							{{if ne $v.ID 1}}
+							<a title="删除" onclick="delete_column({{$v.ID}},'/backend/member/user-delete')" href="javascript:;" style="color: #2D8CF0">
+								删除
+							</a>
+							{{end}}
+						</td>
+					</tr>
+					{{end}}
+				</tbody>
+			</table>
+		</form>
+		<div class="layui-laypage">
+			{{.page}}
+		</div>
+
+
+	</div>
+</div>
+<!--js逻辑-->
+{{template "backend/public/footer.html"}}
+</body>
+</html>
+{{end}}

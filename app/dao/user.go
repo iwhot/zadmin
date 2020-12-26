@@ -27,7 +27,7 @@ func (u user) GetUserList(ctx *gin.Context, pz int) ([]*model.User, error) {
 }
 
 //添加用户
-func (u user) AddUser(ctx *gin.Context, spath string) error {
+func (u user) AddUser(ctx *gin.Context) error {
 	var role_id, _ = strconv.Atoi(ctx.PostForm("role_id"))
 	if role_id == 0 {
 		return errors.New("角色必须选择")
@@ -66,7 +66,7 @@ func (u user) AddUser(ctx *gin.Context, spath string) error {
 		RoleID:   uint32(role_id),
 	}
 
-	return usr.AddUser(masterDB, spath)
+	return usr.AddUser(masterDB)
 }
 
 //获取一条用户记录
@@ -90,7 +90,7 @@ func (u user) Count(ctx *gin.Context) int {
 }
 
 //编辑用户
-func (u user) Update(ctx *gin.Context, spath string) error {
+func (u user) Update(ctx *gin.Context) error {
 	var role_id, _ = strconv.Atoi(ctx.PostForm("role_id"))
 	if role_id == 0 {
 		return errors.New("角色必须选择")
@@ -129,7 +129,7 @@ func (u user) Update(ctx *gin.Context, spath string) error {
 			RoleID:   uint32(role_id),
 		}
 
-		return usr.UpdateUser(masterDB, spath)
+		return usr.UpdateUser(masterDB)
 
 	} else {
 		var usr = model.User{
@@ -142,13 +142,13 @@ func (u user) Update(ctx *gin.Context, spath string) error {
 			RoleID: uint32(role_id),
 		}
 
-		return usr.UpdateUser(masterDB, spath)
+		return usr.UpdateUser(masterDB)
 	}
 
 }
 
 //删除用户
-func (u user) Delete(ctx *gin.Context, spath string) error {
+func (u user) Delete(ctx *gin.Context) error {
 	var id, _ = strconv.Atoi(ctx.Query("id"))
 	if id == 0 {
 		return errors.New("用户不存在")
@@ -158,5 +158,5 @@ func (u user) Delete(ctx *gin.Context, spath string) error {
 		ID: uint32(id),
 	}
 
-	return usr.DeleteUser(masterDB, spath)
+	return usr.DeleteUser(masterDB)
 }

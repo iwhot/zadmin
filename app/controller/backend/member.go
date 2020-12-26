@@ -75,7 +75,7 @@ func (this *Member) AddPost(ctx *gin.Context) {
 	}
 
 	//添加用户
-	err = dao.DefaultUserDao.AddUser(ctx, controller.STORAGEPATH)
+	err = dao.DefaultUserDao.AddUser(ctx)
 	if err != nil {
 		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
 		return
@@ -107,7 +107,7 @@ func (this *Member) EditPost(ctx *gin.Context) {
 	}
 
 	//编辑用户
-	err = dao.DefaultUserDao.Update(ctx, controller.STORAGEPATH)
+	err = dao.DefaultUserDao.Update(ctx)
 	if err != nil {
 		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
 		return
@@ -119,7 +119,7 @@ func (this *Member) EditPost(ctx *gin.Context) {
 
 //删除用户
 func (this *Member) Delete(ctx *gin.Context) {
-	err := dao.DefaultUserDao.Delete(ctx, controller.STORAGEPATH)
+	err := dao.DefaultUserDao.Delete(ctx)
 	if err != nil {
 		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
 		return
