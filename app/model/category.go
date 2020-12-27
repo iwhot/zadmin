@@ -27,24 +27,25 @@ func (c Category) TableName() string {
 }
 
 //添加
-func (c Category) Create(DB *gorm.DB, spath string) error {
+func (c Category) Create(DB *gorm.DB) error {
 	tx := DB.Begin()
-	if err := DB.Create(&c).Error;err != nil{
+	if err := DB.Create(&c).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
-
-	if c.Thumb != ""{
-
-	}
-
 	tx.Commit()
 	return nil
 }
 
 //修改
 func (c Category) Update(DB *gorm.DB) error {
-	return DB.Model(&c).Updates(c).Error
+	tx := DB.Begin()
+	if err := DB.Model(&c).Updates(c).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
 }
 
 //获取一个分类
@@ -81,6 +82,11 @@ func (c Category) Delete(DB *gorm.DB) error {
 	if err == nil && art != nil {
 		tx.Rollback()
 		return errors.New("分类下有文章不可删除")
+	}
+
+	if err2 := tx.Where("id=?",c.ID).Delete(Category{}).Error;err2 != nil{
+		tx.Rollback()
+		return err2
 	}
 
 	tx.Commit()

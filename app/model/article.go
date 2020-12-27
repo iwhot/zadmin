@@ -1,5 +1,10 @@
 package model
 
+import (
+	"errors"
+	"github.com/jinzhu/gorm"
+)
+
 type Article struct {
 	ID         uint32 `gorm:"column:id;primary_key;AUTO_INCREMENT" json:"id"`
 	Title      string `gorm:"column:title;" json:"title"`
@@ -26,15 +31,56 @@ func (a Article) TableName() string {
 }
 
 //创建
+func (a Article) Create(db *gorm.DB, tags []*Tag) error {
+	tx := db.Begin()
+
+	//创建文章
+	if err := tx.Create(&a).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	//关联文章-标签
+	if len(tags) > 0 {
+		for _, v := range tags {
+			tid := v.Create(tx)
+			if tid > 0 {
+				var at = ArticleTag{
+					ArticleID: a.ID,
+					TagID:     tid,
+				}
+
+				if err := at.Create(tx); err != nil {
+					tx.Rollback()
+					return err
+				}
+			} else {
+				tx.Rollback()
+				return errors.New("失败")
+			}
+		}
+	}
+
+	tx.Commit()
+	return nil
+}
 
 //修改
+func (a Article) Update(db *gorm.DB) {
+
+}
 
 //删除
+func (a Article) Delete(db *gorm.DB) {
+
+}
 
 //获取一条记录
+func (a Article) FindOne(db *gorm.DB) {
+
+}
 
 //获取列表
+func (a Article) GetArticleList(db *gorm.DB) {
 
-//点赞
-
-//喜欢
+}

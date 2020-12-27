@@ -71,19 +71,7 @@ func (u User) AddUser(DB *gorm.DB) error {
 		tx.Rollback()
 		return err
 	}
-
-	if u.Avatar != "" {
-		var fls = Files{
-			Url:  u.Avatar,
-			Type: 1,
-		}
-
-		if err := fls.Create(tx);err != nil{
-			tx.Rollback()
-			return err
-		}
-	}
-
+	//todo 加入文件管理器
 	tx.Commit()
 	return nil
 }
@@ -98,16 +86,7 @@ func (u User) UpdateUser(DB *gorm.DB) error {
 		return err
 	}
 
-	if u.Avatar != "" {
-		var f = Files{
-			Url: u.Avatar,
-		}
-
-		if err := f.Update(tx);err != nil{
-			tx.Rollback()
-			return err
-		}
-	}
+	//todo 加入文件管理器
 
 	tx.Commit()
 	return nil

@@ -3,7 +3,6 @@ package model
 import (
 	"errors"
 	"github.com/iwhot/zadmin/app/controller"
-	"github.com/iwhot/zadmin/system/common"
 	page2 "github.com/iwhot/zadmin/system/page"
 	"github.com/jinzhu/gorm"
 	"os"
@@ -24,15 +23,6 @@ func (f Files) TableName() string {
 
 //添加数据
 func (f Files) Create(DB *gorm.DB) error {
-	spath := controller.STORAGEPATH
-	_, err := f.FindOne(DB)
-	if err != nil {
-		if common.IsExists(spath + f.Name) {
-			//如果不在管理器中就干掉文件
-			_ = os.Remove(spath + f.Name)
-		}
-		return err
-	}
 	return DB.Create(&f).Error
 }
 
@@ -84,16 +74,5 @@ func (f Files) FindOne(DB *gorm.DB) (*Files, error) {
 
 //更新记录
 func (f Files) Update(DB *gorm.DB) error {
-	f2,err := f.FindOne(DB)
-	if err != nil {
-		return err
-	}
-
-	if common.IsExists(controller.STORAGEPATH + f2.Url) {
-		//如果不在管理器中就干掉文件
-		_ = os.Remove(controller.STORAGEPATH + f2.Url)
-	}
-
-	f.ID = f2.ID
 	return DB.Model(&f).Updates(f).Error
 }
