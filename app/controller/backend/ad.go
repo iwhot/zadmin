@@ -10,12 +10,12 @@ type Ad struct {
 }
 
 func (this *Ad) NewRouter(g *gin.RouterGroup) {
-	g.GET("/backend/ad/ad-list", this.Index)
-	g.GET("/backend/ad/ad-add", this.Add)
-	g.POST("/backend/ad/ad-add-post", this.AddPost)
-	g.GET("/backend/ad/ad-edit", this.Edit)
-	g.POST("/backend/ad/ad-edit-post", this.EditPost)
-	g.GET("/backend/ad/ad-delete", this.Delete)
+	g.GET("/backend/ad/ad-list"+controller.BACKENDFIX, this.Index)
+	g.GET("/backend/ad/ad-add"+controller.BACKENDFIX, this.Add)
+	g.POST("/backend/ad/ad-add-post"+controller.BACKENDFIX, this.AddPost)
+	g.GET("/backend/ad/ad-edit"+controller.BACKENDFIX, this.Edit)
+	g.POST("/backend/ad/ad-edit-post"+controller.BACKENDFIX, this.EditPost)
+	g.GET("/backend/ad/ad-delete"+controller.BACKENDFIX, this.Delete)
 }
 
 //广告列表

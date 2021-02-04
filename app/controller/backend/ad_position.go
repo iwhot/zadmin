@@ -10,12 +10,12 @@ type AdPosition struct {
 }
 
 func (this *AdPosition) NewRouter(g *gin.RouterGroup) {
-	g.GET("/backend/ad-position/user-list", this.Index)
-	g.GET("/backend/ad-position/user-add", this.Add)
-	g.POST("/backend/ad-position/user-add-post", this.AddPost)
-	g.GET("/backend/ad-position/user-edit", this.Edit)
-	g.POST("/backend/ad-position/user-edit-post", this.EditPost)
-	g.GET("/backend/ad-position/user-delete", this.Delete)
+	g.GET("/backend/ad-position/user-list"+controller.BACKENDFIX, this.Index)
+	g.GET("/backend/ad-position/user-add"+controller.BACKENDFIX, this.Add)
+	g.POST("/backend/ad-position/user-add-post"+controller.BACKENDFIX, this.AddPost)
+	g.GET("/backend/ad-position/user-edit"+controller.BACKENDFIX, this.Edit)
+	g.POST("/backend/ad-position/user-edit-post"+controller.BACKENDFIX, this.EditPost)
+	g.GET("/backend/ad-position/user-delete"+controller.BACKENDFIX, this.Delete)
 }
 
 //用户列表

@@ -10,12 +10,12 @@ type Menu struct {
 }
 
 func (this *Menu) NewRouter(g *gin.RouterGroup) {
-	g.GET("/backend/menu/menu-list", this.Index)
-	g.GET("/backend/menu/menu-add", this.Add)
-	g.POST("/backend/menu/menu-add-post", this.AddPost)
-	g.GET("/backend/menu/menu-edit", this.Edit)
-	g.POST("/backend/menu/menu-edit-post", this.EditPost)
-	g.GET("/backend/menu/menu-delete", this.Delete)
+	g.GET("/backend/menu/menu-list"+controller.BACKENDFIX, this.Index)
+	g.GET("/backend/menu/menu-add"+controller.BACKENDFIX, this.Add)
+	g.POST("/backend/menu/menu-add-post"+controller.BACKENDFIX, this.AddPost)
+	g.GET("/backend/menu/menu-edit"+controller.BACKENDFIX, this.Edit)
+	g.POST("/backend/menu/menu-edit-post"+controller.BACKENDFIX, this.EditPost)
+	g.GET("/backend/menu/menu-delete"+controller.BACKENDFIX, this.Delete)
 }
 
 //用户列表

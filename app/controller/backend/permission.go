@@ -16,12 +16,12 @@ type Permission struct {
 }
 
 func (this *Permission) NewRouter(g *gin.RouterGroup) {
-	g.GET("/auth-permission/permission-list", this.Index)
-	g.GET("/auth-permission/permission-add", this.Add)
-	g.POST("/auth-permission/permission-add-post", this.AddPost)
-	g.GET("/auth-permission/permission-edit/:id", this.Edit)
-	g.POST("/auth-permission/permission-edit-post", this.EditPost)
-	g.GET("/auth-permission/permission-delete", this.Delete)
+	g.GET("/auth-permission/permission-list"+controller.BACKENDFIX, this.Index)
+	g.GET("/auth-permission/permission-add"+controller.BACKENDFIX, this.Add)
+	g.POST("/auth-permission/permission-add-post"+controller.BACKENDFIX, this.AddPost)
+	g.GET("/auth-permission/permission-edit/:id"+controller.BACKENDFIX, this.Edit)
+	g.POST("/auth-permission/permission-edit-post"+controller.BACKENDFIX, this.EditPost)
+	g.GET("/auth-permission/permission-delete"+controller.BACKENDFIX, this.Delete)
 }
 
 //权限列表

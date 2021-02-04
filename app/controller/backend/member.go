@@ -14,12 +14,12 @@ type Member struct {
 }
 
 func (this *Member) NewRouter(g *gin.RouterGroup) {
-	g.GET("/member/user-list", this.Index)
-	g.GET("/member/user-add", this.Add)
-	g.POST("/member/user-add-post", this.AddPost)
-	g.GET("/member/user-edit/:id", this.Edit)
-	g.POST("/member/user-edit-post", this.EditPost)
-	g.GET("/member/user-delete", this.Delete)
+	g.GET("/member/user-list"+controller.BACKENDFIX, this.Index)
+	g.GET("/member/user-add"+controller.BACKENDFIX, this.Add)
+	g.POST("/member/user-add-post"+controller.BACKENDFIX, this.AddPost)
+	g.GET("/member/user-edit/:id"+controller.BACKENDFIX, this.Edit)
+	g.POST("/member/user-edit-post"+controller.BACKENDFIX, this.EditPost)
+	g.GET("/member/user-delete"+controller.BACKENDFIX, this.Delete)
 }
 
 //用户列表

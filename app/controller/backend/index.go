@@ -18,10 +18,10 @@ type Index struct {
 }
 
 func (this *Index) NewRouter(g *gin.RouterGroup) {
-	g.GET("/index", this.Index)
-	g.GET("/menu", this.Menu)
-	g.GET("/welcome", this.Welcome)
-	g.POST("/upload", this.Upload)
+	g.GET("/index"+controller.BACKENDFIX, this.Index)
+	g.GET("/menu"+controller.BACKENDFIX, this.Menu)
+	g.GET("/welcome"+controller.BACKENDFIX, this.Welcome)
+	g.POST("/upload"+controller.BACKENDFIX, this.Upload)
 }
 
 //后台首页

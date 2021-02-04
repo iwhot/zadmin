@@ -11,9 +11,9 @@ type Index struct {
 
 func (this *Index) NewRouter(g *gin.RouterGroup) {
 	g.GET("/", this.Index)
-	g.GET("/index.html", this.Index)
-	g.GET("/list", this.List)
-	g.GET("/show", this.Show)
+	g.GET("/index"+controller.FRONTENDFIX, this.Index)
+	g.GET("/list"+controller.FRONTENDFIX, this.List)
+	g.GET("/show"+controller.FRONTENDFIX, this.Show)
 }
 
 //首页

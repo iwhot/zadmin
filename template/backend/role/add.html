@@ -10,7 +10,7 @@
 <body>
 <div class="ok-body">
 	<!--form表单-->
-	<form class="layui-form layui-form-pane ok-form" action="/backend/auth-role/role-add-post" method="post" enctype="multipart/form-data">
+	<form class="layui-form layui-form-pane ok-form" action="/backend/auth-role/role-add-post.shun" method="post" enctype="multipart/form-data">
 
 		<div class="layui-form-item">
 			<label class="layui-form-label">角色名</label>
@@ -51,7 +51,7 @@
 			,$ = layui.jquery;
 
 		$.ajax({
-			url:"/backend/auth-role/role-auth",
+			url:"/backend/auth-role/role-auth.shun",
 			data: {id:0},
 			dataType:"json",
 			type:"get",

@@ -10,12 +10,12 @@ type Category struct {
 }
 
 func (this *Category) NewRouter(g *gin.RouterGroup) {
-	g.GET("/backend/category/category-list", this.Index)
-	g.GET("/backend/category/category-add", this.Add)
-	g.POST("/backend/category/category-add-post", this.AddPost)
-	g.GET("/backend/category/category-edit", this.Edit)
-	g.POST("/backend/category/category-edit-post", this.EditPost)
-	g.GET("/backend/category/category-delete", this.Delete)
+	g.GET("/backend/category/category-list"+controller.BACKENDFIX, this.Index)
+	g.GET("/backend/category/category-add"+controller.BACKENDFIX, this.Add)
+	g.POST("/backend/category/category-add-post"+controller.BACKENDFIX, this.AddPost)
+	g.GET("/backend/category/category-edit"+controller.BACKENDFIX, this.Edit)
+	g.POST("/backend/category/category-edit-post"+controller.BACKENDFIX, this.EditPost)
+	g.GET("/backend/category/category-delete"+controller.BACKENDFIX, this.Delete)
 }
 
 //栏目列表

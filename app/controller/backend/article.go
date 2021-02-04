@@ -10,12 +10,12 @@ type Article struct {
 }
 
 func (this *Article) NewRouter(g *gin.RouterGroup) {
-	g.GET("/backend/article/article-list", this.Index)
-	g.GET("/backend/article/article-add", this.Add)
-	g.POST("/backend/article/article-add-post", this.AddPost)
-	g.GET("/backend/article/article-edit", this.Edit)
-	g.POST("/backend/article/article-edit-post", this.EditPost)
-	g.GET("/backend/article/article-delete", this.Delete)
+	g.GET("/backend/article/article-list"+controller.BACKENDFIX, this.Index)
+	g.GET("/backend/article/article-add"+controller.BACKENDFIX, this.Add)
+	g.POST("/backend/article/article-add-post"+controller.BACKENDFIX, this.AddPost)
+	g.GET("/backend/article/article-edit"+controller.BACKENDFIX, this.Edit)
+	g.POST("/backend/article/article-edit-post"+controller.BACKENDFIX, this.EditPost)
+	g.GET("/backend/article/article-delete"+controller.BACKENDFIX, this.Delete)
 }
 
 //文章列表

@@ -16,6 +16,8 @@ import (
 const (
 	PAGESIZE    = 20 //一页条数
 	STORAGEPATH = "storage"
+	BACKENDFIX = ".shun"
+	FRONTENDFIX = ".html"
 )
 
 type Controller struct {

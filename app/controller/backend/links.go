@@ -10,12 +10,12 @@ type Links struct {
 }
 
 func (this *Links) NewRouter(g *gin.RouterGroup) {
-	g.GET("/backend/links/links-list", this.Index)
-	g.GET("/backend/links/links-add", this.Add)
-	g.POST("/backend/links/links-add-post", this.AddPost)
-	g.GET("/backend/links/links-edit", this.Edit)
-	g.POST("/backend/links/links-edit-post", this.EditPost)
-	g.GET("/backend/links/links-delete", this.Delete)
+	g.GET("/backend/links/links-list"+controller.BACKENDFIX, this.Index)
+	g.GET("/backend/links/links-add"+controller.BACKENDFIX, this.Add)
+	g.POST("/backend/links/links-add-post"+controller.BACKENDFIX, this.AddPost)
+	g.GET("/backend/links/links-edit"+controller.BACKENDFIX, this.Edit)
+	g.POST("/backend/links/links-edit-post"+controller.BACKENDFIX, this.EditPost)
+	g.GET("/backend/links/links-delete"+controller.BACKENDFIX, this.Delete)
 }
 
 //友链列表

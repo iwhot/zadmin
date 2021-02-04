@@ -10,7 +10,7 @@ type Setting struct {
 }
 
 func (this *Setting) NewRouter(g *gin.RouterGroup) {
-	g.GET("/backend/setting/index", this.Index)
+	g.GET("/backend/setting/index"+controller.BACKENDFIX, this.Index)
 }
 
 //配置管理
