@@ -1,7 +1,7 @@
 [
   {
     "title": "控制台",
-    "href": "/backend/welcome",
+    "href": "/backend/welcome.shun",
     "fontFamily": "ok-icon",
     "icon": "&#xe654;",
     "spread": true,
@@ -15,20 +15,20 @@
     "children": [
       {
         "title": "用户列表",
-        "href": "/backend/member/user-list",
+        "href": "/backend/member/user-list.shun",
         "fontFamily": "layui-icon",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "角色列表",
-        "href": "/backend/auth-role/role-list",
+        "href": "/backend/auth-role/role-list.shun",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "权限列表",
-        "href": "/backend/auth-permission/permission-list",
+        "href": "/backend/auth-permission/permission-list.shun",
         "icon": "&#xe62e;",
         "spread": false
       }
@@ -42,20 +42,20 @@
     "children": [
       {
         "title": "栏目列表",
-        "href": "/backend/category/category-list",
+        "href": "/backend/category/category-list.shun",
         "fontFamily": "layui-icon",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "文章列表",
-        "href": "/backend/article/article-list",
+        "href": "/backend/article/article-list.shun",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "单页列表",
-        "href": "/backend/page/list",
+        "href": "/backend/page/list.shun",
         "icon": "&#xe62e;",
         "spread": false
       }
@@ -70,26 +70,26 @@
     "children": [
       {
         "title": "基础设置",
-        "href": "/backend/setting/index",
+        "href": "/backend/setting/index.shun",
         "fontFamily": "layui-icon",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "友情链接",
-        "href": "/backend/links/links-list",
+        "href": "/backend/links/links-list.shun",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "广告位管理",
-        "href": "/backend/ad-position/position-list",
+        "href": "/backend/ad-position/position-list.shun",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "菜单管理",
-        "href": "/backend/menu/menu-list",
+        "href": "/backend/menu/menu-list.shun",
         "icon": "&#xe62e;",
         "spread": false
       }

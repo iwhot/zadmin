@@ -18,32 +18,32 @@ func (this *Menu) NewRouter(g *gin.RouterGroup) {
 	g.GET("/backend/menu/menu-delete"+controller.BACKENDFIX, this.Delete)
 }
 
-//用户列表
+//菜单列表
 func (this *Menu) Index(ctx *gin.Context) {
 
 }
 
-//添加用户
+//添加菜单
 func (this *Menu) Add(ctx *gin.Context) {
 
 }
 
-//添加用户提交
+//添加菜单提交
 func (this *Menu) AddPost(ctx *gin.Context) {
 
 }
 
-//编辑用户
+//编辑菜单
 func (this *Menu) Edit(ctx *gin.Context) {
 
 }
 
-//编辑用户提交
+//编辑菜单提交
 func (this *Menu) EditPost(ctx *gin.Context) {
 
 }
 
-//删除用户
+//删除菜单
 func (this *Menu) Delete(ctx *gin.Context) {
 
 }

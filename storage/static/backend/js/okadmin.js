@@ -11,7 +11,7 @@ layui.use(["element", "form", "layer", "okUtils", "okTab", "okLayer", "okContext
 
 	var okTab = layui.okTab({
 		// 菜单请求路径
-		url: "/backend/menu",
+		url: "/backend/menu.shun",
 		// 允许同时选项卡的个数
 		openTabNum: 30,
 		// 如果返回的结果和navs.json中的数据结构一致可省略这个方法
