@@ -22,7 +22,7 @@
 	<!--数据表格-->
 	<div class="layui-row">
 
-		<form class="layui-form ok-search-form" action="/backend/member/user-list" method="get">
+		<form class="layui-form ok-search-form" action="/backend/member/user-list.shun" method="get">
 			<div class="layui-form-item">
 				<div class="layui-inline">
 					<label class="layui-form-label">账号</label>
@@ -54,7 +54,7 @@
 		</form>
 
 		<div class="layui-card-header">
-			<a class="layui-btn layui-btn-sm" onclick="layui.okLayer.open('添加用户', '/backend/member/user-add', '90%', '90%')">添加用户</a>
+			<a class="layui-btn layui-btn-sm" onclick="layui.okLayer.open('添加用户', '/backend/member/user-add.shun', '90%', '90%')">添加用户</a>
 		</div>
 
 		<form action="" id="tableForm">
@@ -81,12 +81,12 @@
 						<td>{{UnixToDateTime $v.Ctime}}</td>
 						<td>{{UnixToDateTime $v.Ltime}}</td>
 						<td>
-							<a title="编辑"  onclick="layui.okLayer.open('编辑用户', '/backend/member/user-edit/{{$v.ID}}', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
+							<a title="编辑"  onclick="layui.okLayer.open('编辑用户', '/backend/member/user-edit/{{$v.ID}}.shun', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
 								编辑
 							</a>&nbsp;&nbsp;
 
 							{{if ne $v.ID 1}}
-							<a title="删除" onclick="delete_column({{$v.ID}},'/backend/member/user-delete')" href="javascript:;" style="color: #2D8CF0">
+							<a title="删除" onclick="delete_column({{$v.ID}},'/backend/member/user-delete.shun')" href="javascript:;" style="color: #2D8CF0">
 								删除
 							</a>
 							{{end}}

@@ -18,32 +18,32 @@ func (this *AdPosition) NewRouter(g *gin.RouterGroup) {
 	g.GET("/backend/ad-position/user-delete"+controller.BACKENDFIX, this.Delete)
 }
 
-//用户列表
+//广告位列表
 func (this *AdPosition) Index(ctx *gin.Context) {
 
 }
 
-//添加用户
+//添加广告位
 func (this *AdPosition) Add(ctx *gin.Context) {
 
 }
 
-//添加用户提交
+//添加广告位提交
 func (this *AdPosition) AddPost(ctx *gin.Context) {
 
 }
 
-//编辑用户
+//编辑广告位
 func (this *AdPosition) Edit(ctx *gin.Context) {
 
 }
 
-//编辑用户提交
+//编辑广告位提交
 func (this *AdPosition) EditPost(ctx *gin.Context) {
 
 }
 
-//删除用户
+//删除广告位
 func (this *AdPosition) Delete(ctx *gin.Context) {
 
 }

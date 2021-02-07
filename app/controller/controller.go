@@ -16,7 +16,7 @@ import (
 const (
 	PAGESIZE    = 20 //一页条数
 	STORAGEPATH = "storage"
-	BACKENDFIX = ".shun"
+	BACKENDFIX  = ".shun"
 	FRONTENDFIX = ".html"
 )
 
@@ -83,5 +83,23 @@ func checkValidator(ctx *gin.Context, valid interface{}, trans ut.Translator) er
 
 //404页面
 func (this *Controller) NotFound(ctx *gin.Context) {
-	this.Render(ctx, "base/404/404.html", nil)
+	//接口就返回json
+	apiIndex := strings.Index(ctx.Request.URL.String(), "/api")
+	if apiIndex == 0 {
+		this.JSON(ctx, gin.H{
+			"code": 404,
+			"msg":  "页面不存在",
+		})
+		return
+	}
+
+	//返回后台错误
+	backIndex := strings.Index(ctx.Request.URL.String(), "/backend")
+	if backIndex == 0 {
+		this.Render(ctx, "base/404/back_404.html", nil)
+		return
+	}
+
+	//返回前台错误
+	this.Render(ctx, "base/404/front_404.html", nil)
 }

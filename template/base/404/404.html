@@ -1,3 +1,4 @@
+{{define "base/404/back_404.html"}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,12 +15,21 @@
         .box .iconfont {
             font-size: 300px;
         }
+
+        a{
+            text-decoration: none;color: #3F3F3F;
+        }
+        a:hover{
+            color: #1E9FFF;
+        }
     </style>
 </head>
 <body>
 <div class="box">
     <i class="iconfont icon-404cuowu"></i>
     <p>小哥哥小姐姐，页面找不到了！</p>
+    <p><a href="/backend/welcome.shun" class="btn btn-primary">返回首页</a></p>
 </div>
 </body>
 </html>
+{{end}}
