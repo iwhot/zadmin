@@ -12,4 +12,8 @@ go写的一个小博客(未完成)
 ```
 
 #### nginx代理
-//todo
+```
+location / {
+    proxy_pass http://127.0.0.1:2020;
+}
+```
