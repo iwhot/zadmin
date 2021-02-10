@@ -42,14 +42,14 @@
     "children": [
       {
         "title": "栏目列表",
-        "href": "/backend/category/category-list.shun",
+        "href": "/backend/category/list.shun",
         "fontFamily": "layui-icon",
         "icon": "&#xe62e;",
         "spread": false
       },
       {
         "title": "文章列表",
-        "href": "/backend/article/article-list.shun",
+        "href": "/backend/article/list.shun",
         "icon": "&#xe62e;",
         "spread": false
       },
@@ -90,6 +90,12 @@
       {
         "title": "菜单管理",
         "href": "/backend/menu/menu-list.shun",
+        "icon": "&#xe62e;",
+        "spread": false
+      },
+      {
+        "title": "文件管理",
+        "href": "/backend/media/list.shun",
         "icon": "&#xe62e;",
         "spread": false
       }

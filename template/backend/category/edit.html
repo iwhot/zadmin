@@ -1,16 +1,16 @@
-{{define "backend/category/add.html"}}
+{{define "backend/category/edit.html"}}
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>添加分类</title>
+	<title>编辑分类</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	{{template "backend/public/header.html"}}
 </head>
 <body>
 <div class="ok-body">
 	<!--form表单-->
-	<form class="layui-form layui-form-pane ok-form" action="/backend/category/add-post.shun" method="post" enctype="multipart/form-data">
+	<form class="layui-form layui-form-pane ok-form" action="/backend/category/edit-post.shun" method="post" enctype="multipart/form-data">
 
 		<div class="layui-tab">
 			<ul class="layui-tab-title">
@@ -22,42 +22,46 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">分类名</label>
 						<div class="layui-input-block">
-							<input type="text" name="name" value="" placeholder="请输入分类名" autocomplete="off" class="layui-input" lay-verify="required">
+							<input type="text" name="name" value="{{.info.Name}}" placeholder="请输入分类名" autocomplete="off" class="layui-input" lay-verify="required">
 						</div>
 					</div>
-
-					<div class="layui-form-item">
-						<label class="layui-form-label">上级分类</label>
-						<div class="layui-input-block">
-							<select name="pid" lay-verify="required">
-								<option value="0">请选择</option>
-								{{range $k,$v := .list}}
-								<option value="{{$v.ID}}">{{$v.Name}}</option>
-								{{end}}
-							</select>
+					{{$p := 0}}
+					{{$pid := .info.PID}}
+					{{if ne $pid $p}}
+						<div class="layui-form-item">
+							<label class="layui-form-label">上级分类</label>
+							<div class="layui-input-block">
+								<select name="pid" lay-verify="required">
+									<option value="0">请选择</option>
+									{{range $k,$v := .list}}
+									<option value="{{$v.ID}}" {{if eq $v.ID $pid}} selected="selected"{{end}}>{{$v.Name}}</option>
+									{{end}}
+								</select>
+							</div>
 						</div>
-					</div>
+					{{end}}
 
 					<div class="layui-form-item">
 						<label class="layui-form-label">分类目录</label>
 						<div class="layui-input-block">
-							<input type="text" name="ename" value="" placeholder="请输入分类目录(英文、数字、下划线组合)" autocomplete="off" class="layui-input" lay-verify="required">
+							<input type="text" name="ename" value="{{.info.Ename}}" placeholder="请输入分类目录(英文、数字、下划线组合)" autocomplete="off" class="layui-input" lay-verify="required">
 						</div>
 					</div>
 
 					<div class="layui-form-item">
 						<label class="layui-form-label">图标</label>
 						<div class="layui-input-block">
-							<input type="text" name="icon" value="" placeholder="请输入图标" autocomplete="off" class="layui-input">
+							<input type="text" name="icon" value="{{.info.Icon}}" placeholder="请输入图标" autocomplete="off" class="layui-input">
 						</div>
 					</div>
 
 					<div class="layui-form-item">
 						<label class="layui-form-label">状态</label>
 						<div class="layui-input-block">
+							{{$state := .info.State}}
 							<select name="state">
-								<option value="1">启用</option>
-								<option value="0">关闭</option>
+								<option value="1" {{if eq $state 1}}selected="selected"{{end}}>启用</option>
+								<option value="0" {{if eq $state 0}}selected="selected"{{end}}>关闭</option>
 							</select>
 						</div>
 					</div>
@@ -65,20 +69,26 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">分类图片</label>
 						<div class="layui-input-inline">
-							<input type="text" name="thumb" value="" class="layui-input">
+							<input type="text" name="thumb" value="{{.info.Thumb}}" class="layui-input">
 						</div>
 						<div class="layui-input-inline">
 							<button type="button" class="layui-btn upload-img" data-url="/backend/upload"><i class="layui-icon"></i>上传文件</button>
 						</div>
 						<div class="layui-input-inline">
-							<img src="/uploads/nophoto.jpg" alt="图片没有上传哦！" title="图片没有上传哦！" width="60" height="60" style="border: 1px solid #eee;padding: 0;margin-left:-75px;">
+
+							{{if eq .info.Thumb ""}}
+								<img src="/uploads/nophoto.jpg" alt="图片没有上传哦！" title="图片没有上传哦！" width="60" height="60" style="border: 1px solid #eee;padding: 0;margin-left:-75px;">
+							{{else}}
+								<img src="{{.info.Thumb}}" width="60" height="60" style="border: 1px solid #eee;padding: 0;margin-left:-75px;">
+							{{end}}
+
 						</div>
 					</div>
 
 					<div class="layui-form-item layui-form-text">
 						<label class="layui-form-label">备注</label>
 						<div class="layui-input-block">
-							<textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+							<textarea name="remark" placeholder="请输入内容" class="layui-textarea">{{.info.Remark}}</textarea>
 						</div>
 					</div>
 				</div>
@@ -86,29 +96,28 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">SEO标题</label>
 						<div class="layui-input-block">
-							<input name="seo_title" placeholder="请输入SEO标题" class="layui-input" />
+							<input name="seo_title" value="{{.info.SeoTitle}}" placeholder="请输入SEO标题" class="layui-input" />
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">SEO关键词</label>
 						<div class="layui-input-block">
-							<input name="seo_kwds" placeholder="请输入SEO关键词" class="layui-input" />
+							<input name="seo_kwds" value="{{.info.SeoKwds}}" placeholder="请输入SEO关键词" class="layui-input" />
 						</div>
 					</div>
 					<div class="layui-form-item layui-form-text">
 						<label class="layui-form-label">SEO描述</label>
 						<div class="layui-input-block">
-							<textarea name="seo_desc" placeholder="请输入SEO描述" class="layui-textarea"></textarea>
+							<textarea name="seo_desc" placeholder="请输入SEO描述" class="layui-textarea">{{.info.SeoDesc}}</textarea>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-
-
 		<div class="layui-form-item">
 			<div class="layui-input-block">
+				<input type="hidden" name="id" value="{{.info.ID}}">
 				<button class="layui-btn" lay-submit lay-filter="save">立即提交</button>
 				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 			</div>

@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 17/11/2020 10:28:52
+ Date: 09/02/2021 13:08:16
 */
 
 SET NAMES utf8mb4;
@@ -130,11 +130,12 @@ CREATE TABLE `zs_category`  (
   `seo_desc` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'seo描述',
   `thumb` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '分类图片',
   `uuid` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'uuid',
+  `state` tinyint(2) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态：0关闭，1启用',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uuid`(`uuid`) USING BTREE,
   INDEX `pid`(`pid`) USING BTREE,
   INDEX `name`(`name`) USING BTREE,
-  INDEX `ename`(`ename`) USING BTREE
+  UNIQUE INDEX `ename`(`ename`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '栏目分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -158,8 +159,12 @@ CREATE TABLE `zs_files`  (
   `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '图片名称',
   `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '图片地址',
   `size` double(20, 3) UNSIGNED NOT NULL DEFAULT 0.000 COMMENT '图片大小',
-  `type` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '使用状态：0未使用，1使用中',
+  `type` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '文件类型：0其他，1图片，2文档，3表格',
   `ctime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `state` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '使用状态：0未使用，1使用中',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '文件标题',
+  `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文件描述',
+  `utime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `name`(`name`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件管理器' ROW_FORMAT = Dynamic;

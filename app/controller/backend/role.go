@@ -63,7 +63,7 @@ func (this *Role) AddPost(ctx *gin.Context) {
 		this.JSON(ctx, gin.H{"code": 0, "msg": fmt.Sprintf("%v", err)})
 		return
 	}
-	//成功添加用户
+
 	this.JSON(ctx, gin.H{"code": 1, "msg": "添加角色成功"})
 }
 

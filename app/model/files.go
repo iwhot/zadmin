@@ -15,6 +15,10 @@ type Files struct {
 	Size  float64 `gorm:"column:size;type:double(20,3);not null;default:0" json:"size"`
 	Type  uint8   `gorm:"column:type;type:tinyint(2);not null;default:0" json:"type"`
 	Ctime uint32  `gorm:"column:ctime;type:int(10);not null;default:0" json:"ctime"`
+	State uint8   `gorm:"column:state;type:tinyint(2);not null;default:0" json:"state"`
+	Title string  `gorm:"column:title;" json:"title"`
+	Desc  string  `gorm:"column:desc;" json:"desc"`
+	Utime uint32  `gorm:"column:utime;type:int(10);not null;default:0" json:"utime"`
 }
 
 func (f Files) TableName() string {
@@ -75,4 +79,41 @@ func (f Files) FindOne(DB *gorm.DB) (*Files, error) {
 //更新记录
 func (f Files) Update(DB *gorm.DB) error {
 	return DB.Model(&f).Updates(f).Error
+}
+
+//获取文件列表
+func (f Files) GetFileList(DB *gorm.DB, page, pageSize int) ([]*Files, error) {
+	var file = []*Files{}
+	var offset = page2.GetOffset(page, pageSize)
+
+	if err := DB.Model(&f).Offset(offset).Limit(pageSize).Order("role_utime desc,id desc").Find(&file).Error; err != nil {
+		return nil, err
+	}
+
+	return file, nil
+}
+
+//获取统计
+func (f Files)  Count(DB *gorm.DB) int {
+	var count int
+
+	if err := DB.Model(&f).Count(&count).Error; err != nil {
+		return 0
+	}
+
+	return count
+}
+
+//查找某个文件
+func (f Files) SearchFileByAddress(DB *gorm.DB) uint32 {
+	if f.Url == ""{
+		return 0
+	}
+
+	var file = []*Files{}
+	if err := DB.Model(&f).Where("url=?",f.Url).Offset(0).Limit(1).Find(&file).Error;err != nil{
+		return 0
+	}
+
+	return file[0].ID
 }

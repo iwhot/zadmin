@@ -76,6 +76,8 @@ func (this *Index) Upload(ctx *gin.Context) {
 		Size:  float64(size),
 		Type:  0,
 		Ctime: uint32(time.Now().Unix()),
+		State: common.GetFileType(ext),
+		Utime: uint32(time.Now().Unix()),
 	}
 
 	err = dao.DefaultFilesDao.Create(f)

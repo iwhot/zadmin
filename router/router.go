@@ -39,6 +39,7 @@ func NewRouter(r *gin.Engine) {
 		new(backend.Permission).NewRouter(back) //权限管理
 		new(backend.Role).NewRouter(back)       //角色管理
 		new(backend.Setting).NewRouter(back)    //设置
+		new(backend.Media).NewRouter(back)    //文件管理
 	}
 
 	//后台登录

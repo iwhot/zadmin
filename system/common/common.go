@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -190,5 +191,46 @@ func CreateSalt(n int) string {
 
 //时间戳转时间
 func UnixToDateTime(u uint32) string {
-	return time.Unix(int64(u),0).Format("2006-01-02 15:04:05")
+	return time.Unix(int64(u), 0).Format("2006-01-02 15:04:05")
+}
+
+//判断某一个值是否含在切片之中
+func InArray(val interface{}, array interface{}) (exists bool, index int) {
+	exists = false
+	index = -1
+
+	switch reflect.TypeOf(array).Kind() {
+	case reflect.Slice:
+		s := reflect.ValueOf(array)
+
+		for i := 0; i < s.Len(); i++ {
+			if reflect.DeepEqual(val, s.Index(i).Interface()) == true {
+				index = i
+				exists = true
+				return
+			}
+		}
+	}
+
+	return
+}
+
+//获取文件类型
+func GetFileType(ext string) uint8 {
+	var image = []string{"jpg", "jpeg", "png", "bmp", "gif"}
+	var txt = []string{"txt", "doc", "docx"}
+	var excel = []string{"xls", "xlsx", "csv"}
+
+	if bol, _ := InArray(ext, image); bol == true {
+		return 1
+	}
+
+	if bol, _ := InArray(ext, txt); bol == true {
+		return 2
+	}
+
+	if bol, _ := InArray(ext, excel); bol == true {
+		return 3
+	}
+	return 0
 }

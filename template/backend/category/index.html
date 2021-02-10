@@ -22,39 +22,8 @@
 	<!--数据表格-->
 	<div class="layui-row">
 
-		<form class="layui-form ok-search-form" action="/backend/category/category-list.shun" method="get">
-			<div class="layui-form-item">
-				<div class="layui-inline">
-					<label class="layui-form-label">账号</label>
-					<div class="layui-input-inline">
-						<input type="text" class="layui-input" placeholder="账号" autocomplete="off" name="username" value="{{.username}}">
-					</div>
-				</div>
-				<div class="layui-inline">
-					<label class="layui-form-label">昵称</label>
-					<div class="layui-input-inline">
-						<input type="text" class="layui-input" placeholder="昵称" autocomplete="off" name="rname" value="{{.rname}}">
-					</div>
-				</div>
-				<div class="layui-inline">
-					<label class="layui-form-label">邮箱</label>
-					<div class="layui-input-inline">
-						<input type="text" class="layui-input" placeholder="邮箱" autocomplete="off" name="email" value="{{.email}}">
-					</div>
-				</div>
-
-				<div class="layui-inline">
-					<div class="layui-input-inline">
-						<button class="layui-btn" type="submit">
-							<i class="layui-icon">&#xe615;</i>
-						</button>
-					</div>
-				</div>
-			</div>
-		</form>
-
 		<div class="layui-card-header">
-			<a class="layui-btn layui-btn-sm" onclick="layui.okLayer.open('添加分类', '/backend/category/category-add.shun', '90%', '90%')">添加分类</a>
+			<a class="layui-btn layui-btn-sm" onclick="layui.okLayer.open('添加分类', '/backend/category/add.shun', '90%', '90%')">添加分类</a>
 		</div>
 
 		<form action="" id="tableForm">
@@ -62,10 +31,10 @@
 				<!--, fixed: 'left',width:100  , fixed: 'right',width:250-->
 				<thead>
 					<tr>
-						<th lay-data="{field:'id'}">ID</th>
 						<th lay-data="{field:'name'}">分类名称</th>
-						<th lay-data="{field:'pid'}">上级分类</th>
+						<th lay-data="{field:'ename'}">分类目录</th>
 						<th lay-data="{field:'remark'}">分类描述</th>
+						<th lay-data="{field:'state'}">状态</th>
 						<th lay-data="{field:'ctime'}">创建时间</th>
 						<th lay-data="{field:'utime'}">编辑时间</th>
 						<th lay-data="{field:'manage'}">操作</th>
@@ -74,33 +43,49 @@
 				<tbody>
 					{{range $k,$v := .list}}
 					<tr>
-						<td>{{$v.ID}}</td>
 						<td>{{$v.Name}}</td>
-						<td>{{$v.Pname}}</td>
+						<td>{{$v.Ename}}</td>
 						<td>{{$v.Remark}}</td>
+						<td>
+							{{if eq $v.State 1}}显示{{else}}隐藏{{end}}
+						</td>
 						<td>{{UnixToDateTime $v.Ctime}}</td>
 						<td>{{UnixToDateTime $v.Utime}}</td>
 						<td>
-							<a title="编辑"  onclick="layui.okLayer.open('编辑分类', '/backend/category/category-edit/{{$v.ID}}.shun', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
+							<a title="编辑"  onclick="layui.okLayer.open('编辑分类', '/backend/category/edit/{{$v.ID}}.shun', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
 								编辑
 							</a>&nbsp;&nbsp;
 
-							{{if ne $v.ID 1}}
-							<a title="删除" onclick="delete_column({{$v.ID}},'/backend/category/category-delete.shun')" href="javascript:;" style="color: #2D8CF0">
+							<a title="删除" onclick="delete_column({{$v.ID}},'/backend/category/delete.shun')" href="javascript:;" style="color: #2D8CF0">
 								删除
 							</a>
-							{{end}}
 						</td>
 					</tr>
+						{{range  $p,$q := $v.Children}}
+							<tr>
+								<td>&nbsp;&nbsp;&nbsp;&nbsp;|- {{$q.Name}}</td>
+								<td>{{$q.Ename}}</td>
+								<td>{{$q.Remark}}</td>
+								<td>
+									{{if eq $q.State 1}}显示{{else}}隐藏{{end}}
+								</td>
+								<td>{{UnixToDateTime $q.Ctime}}</td>
+								<td>{{UnixToDateTime $q.Utime}}</td>
+								<td>
+									<a title="编辑"  onclick="layui.okLayer.open('编辑分类', '/backend/category/edit/{{$q.ID}}.shun', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
+										编辑
+									</a>&nbsp;&nbsp;
+
+									<a title="删除" onclick="delete_column({{$q.ID}},'/backend/category/delete.shun')" href="javascript:;" style="color: #2D8CF0">
+										删除
+									</a>
+								</td>
+							</tr>
+						{{end}}
 					{{end}}
 				</tbody>
 			</table>
 		</form>
-		<div class="layui-laypage">
-			{{.page}}
-		</div>
-
-
 	</div>
 </div>
 <!--js逻辑-->

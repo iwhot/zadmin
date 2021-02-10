@@ -1,0 +1,81 @@
+{{define "backend/media/index.html"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>文件管理</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	{{template "backend/public/header.html"}}
+</head>
+<body>
+<!--面包屑导航-->
+<div class="ok-nav">
+	  <span class="layui-breadcrumb">
+		<a href="#">首页</a>
+		<a href="#">系统配置</a>
+		  <a><cite>文件管理</cite></a>
+	  </span>
+</div>
+
+<div class="ok-body">
+
+	<!--数据表格-->
+	<div class="layui-row">
+
+		<form action="" id="tableForm">
+			<table class="layui-table" lay-filter="tableFilter">
+				<!--, fixed: 'left',width:100  , fixed: 'right',width:250-->
+				<thead>
+					<tr>
+						<th lay-data="{field:'id'}">ID</th>
+						<th lay-data="{field:'name'}">名称</th>
+						<th lay-data="{field:'url'}">地址</th>
+						<th lay-data="{field:'type'}">类型</th>
+						<th lay-data="{field:'size'}">大小</th>
+						<th lay-data="{field:'state'}">状态</th>
+						<th lay-data="{field:'title'}">标题</th>
+						<th lay-data="{field:'desc'}">描述</th>
+						<th lay-data="{field:'ctime'}">创建时间</th>
+						<th lay-data="{field:'manage'}">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{range $k,$v := .list}}
+					<tr>
+						<td>{{$v.ID}}</td>
+						<td>{{$v.Name}}</td>
+						<td>{{$v.Url}}</td>
+						<td>{{$v.Type}}</td>
+						<td>{{$v.Size}}</td>
+						<td>{{$v.State}}</td>
+						<td>{{$v.Title}}</td>
+						<td>{{$v.Desc}}</td>
+						<td>{{UnixToDateTime $v.Ctime}}</td>
+						<td>
+							<a title="编辑"  onclick="layui.okLayer.open('编辑文件', '/backend/category/category-edit/{{$v.ID}}.shun', '90%', '90%')" href="javascript:;" style="color: #2D8CF0">
+								编辑
+							</a>&nbsp;&nbsp;
+
+							{{if ne $v.ID 1}}
+							<a title="删除" onclick="delete_column({{$v.ID}},'/backend/category/category-delete.shun')" href="javascript:;" style="color: #2D8CF0">
+								删除
+							</a>
+							{{end}}
+						</td>
+					</tr>
+					{{end}}
+				</tbody>
+			</table>
+		</form>
+		<div class="layui-laypage">
+			{{.page}}
+		</div>
+
+
+	</div>
+</div>
+<!--js逻辑-->
+{{template "backend/public/footer.html"}}
+</body>
+</html>
+{{end}}
