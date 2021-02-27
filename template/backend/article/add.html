@@ -1,0 +1,122 @@
+{{define "backend/article/add.html"}}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>添加文章</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	{{template "backend/public/header.html"}}
+</head>
+<body>
+<div class="ok-body">
+	<!--form表单-->
+	<form class="layui-form layui-form-pane ok-form" action="/backend/article/add-post.shun" method="post" enctype="multipart/form-data">
+
+		<div class="layui-tab">
+			<ul class="layui-tab-title">
+				<li class="layui-this">文章设置</li>
+				<li>SEO设置</li>
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<label class="layui-form-label">文章名</label>
+						<div class="layui-input-block">
+							<input type="text" name="name" value="" placeholder="请输入文章名" autocomplete="off" class="layui-input" lay-verify="required">
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<label class="layui-form-label">上级文章</label>
+						<div class="layui-input-block">
+							<select name="pid" lay-verify="required">
+								<option value="0">请选择</option>
+								{{range $k,$v := .list}}
+								<option value="{{$v.ID}}">{{$v.Name}}</option>
+								{{end}}
+							</select>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<label class="layui-form-label">文章目录</label>
+						<div class="layui-input-block">
+							<input type="text" name="ename" value="" placeholder="请输入文章目录(英文、数字、下划线组合)" autocomplete="off" class="layui-input" lay-verify="required">
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<label class="layui-form-label">图标</label>
+						<div class="layui-input-block">
+							<input type="text" name="icon" value="" placeholder="请输入图标" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<label class="layui-form-label">状态</label>
+						<div class="layui-input-block">
+							<select name="state">
+								<option value="1">启用</option>
+								<option value="0">关闭</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<label class="layui-form-label">文章图片</label>
+						<div class="layui-input-inline">
+							<input type="text" name="thumb" value="" class="layui-input">
+						</div>
+						<div class="layui-input-inline">
+							<button type="button" class="layui-btn upload-img" data-url="/backend/upload"><i class="layui-icon"></i>上传文件</button>
+						</div>
+						<div class="layui-input-inline">
+							<img src="/uploads/nophoto.jpg" alt="图片没有上传哦！" title="图片没有上传哦！" width="60" height="60" style="border: 1px solid #eee;padding: 0;margin-left:-75px;">
+						</div>
+					</div>
+
+					<div class="layui-form-item layui-form-text">
+						<label class="layui-form-label">备注</label>
+						<div class="layui-input-block">
+							<textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="layui-tab-item">
+					<div class="layui-form-item">
+						<label class="layui-form-label">SEO标题</label>
+						<div class="layui-input-block">
+							<input name="seo_title" placeholder="请输入SEO标题" class="layui-input" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">SEO关键词</label>
+						<div class="layui-input-block">
+							<input name="seo_kwds" placeholder="请输入SEO关键词" class="layui-input" />
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-text">
+						<label class="layui-form-label">SEO描述</label>
+						<div class="layui-input-block">
+							<textarea name="seo_desc" placeholder="请输入SEO描述" class="layui-textarea"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit lay-filter="save">立即提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+</div>
+<!--js逻辑-->
+{{template "backend/public/footer.html"}}
+</body>
+</html>
+{{end}}

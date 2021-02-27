@@ -94,7 +94,7 @@ func (f Files) GetFileList(DB *gorm.DB, page, pageSize int) ([]*Files, error) {
 }
 
 //获取统计
-func (f Files)  Count(DB *gorm.DB) int {
+func (f Files) Count(DB *gorm.DB) int {
 	var count int
 
 	if err := DB.Model(&f).Count(&count).Error; err != nil {
@@ -106,14 +106,25 @@ func (f Files)  Count(DB *gorm.DB) int {
 
 //查找某个文件
 func (f Files) SearchFileByAddress(DB *gorm.DB) uint32 {
-	if f.Url == ""{
+	if f.Url == "" {
 		return 0
 	}
 
 	var file = []*Files{}
-	if err := DB.Model(&f).Where("url=?",f.Url).Offset(0).Limit(1).Find(&file).Error;err != nil{
+	if err := DB.Model(&f).Where("url=?", f.Url).Offset(0).Limit(1).Find(&file).Error; err != nil {
 		return 0
 	}
 
 	return file[0].ID
+}
+
+//更新文件
+func (f Files) UpdateFiles(tx *gorm.DB) error {
+	id := f.SearchFileByAddress(tx);
+	if id == 0 {
+		_ = os.Remove(controller.STORAGEPATH + f.Url)
+		return errors.New("文件找不到")
+	}
+	f.ID = id
+	return f.Update(tx)
 }

@@ -2,9 +2,7 @@ package model
 
 import (
 	"errors"
-	"github.com/iwhot/zadmin/app/controller"
 	"github.com/jinzhu/gorm"
-	"os"
 )
 
 type Category struct {
@@ -42,15 +40,7 @@ func (c Category) Create(DB *gorm.DB) error {
 			State: 1,
 		}
 
-		id := file.SearchFileByAddress(tx);
-		if id == 0 {
-			tx.Rollback()
-			_ = os.Remove(controller.STORAGEPATH + file.Url)
-			return errors.New("文件找不到")
-		}
-
-		file.ID = id
-		if err := file.Update(tx); err != nil {
+		if err := file.UpdateFiles(tx);err != nil{
 			tx.Rollback()
 			return err
 		}
@@ -75,7 +65,7 @@ func (c Category) Update(DB *gorm.DB) error {
 		return err
 	}
 
-	if c.Thumb != "" {
+	if (c.Thumb != "") && (c.Thumb != cate.Thumb) {
 		var f1 = Files{
 			Url:   cate.Thumb,
 			State: 0,
@@ -91,16 +81,7 @@ func (c Category) Update(DB *gorm.DB) error {
 			State: 1,
 		}
 
-		id := file.SearchFileByAddress(tx);
-		if id == 0 {
-			tx.Rollback()
-			_ = os.Remove(controller.STORAGEPATH + file.Url)
-			return errors.New("文件找不到")
-		}
-
-		file.ID = id
-
-		if err := file.Update(tx); err != nil {
+		if err := file.UpdateFiles(tx); err != nil {
 			tx.Rollback()
 			return err
 		}

@@ -21,7 +21,7 @@ func (u Role) TableName() string {
 
 //获取角色列表
 func (r Role) GetRoleList(DB *gorm.DB, page, pageSize int) ([]*Role, error) {
-	var roles []*Role
+	var roles = []*Role{}
 
 	var offset = page2.GetOffset(page, pageSize)
 	var mod *gorm.DB
