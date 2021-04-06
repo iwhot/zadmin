@@ -1,4 +1,5 @@
 {{define "backend/public/footer.html"}}
+<script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
     <script>
         layui.use(["element", "jquery", "table", "form", "laydate", "okLayer", "okUtils", "okMock", "upload"], function () {
             let table = layui.table;
@@ -137,7 +138,7 @@
                 }
             });
 
-
+            admin.WangEditor("#editor",$("#content"));
         });
 
 
